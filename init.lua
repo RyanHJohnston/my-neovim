@@ -39,7 +39,7 @@ if has('termguicolors')
   set termguicolors
   endif
   ]])
-  
+
   -- gruvbox-material config --
   vim.o.background = "dark"
   vim.cmd([[:let g:gruvbox_material_background = 'hard']])
@@ -50,12 +50,12 @@ if has('termguicolors')
   vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
   vim.cmd([[:colorscheme gruvbox-material]])
   -- vim.cmd([[:set guicursor=i:block]])
-  
+
   -- vimtex plugin config
   vim.cmd([[:let g:vimtex_view_general_viewer = 'okular']])
   vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
-  
-  
+
+
 
   -- Plugins --
   require('packer').startup(function(use)
@@ -80,9 +80,21 @@ if has('termguicolors')
       run = ':call doge#install()'
     }
     
+    -- Fancy looking errors plugin
+    -- Actively shows where the errors are
+    use({
+      "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+      config = function()
+        require("lsp_lines").setup()
+      end,
+    })
+
+
+
+
     -- Improved tabs (Bybye, Buffer Byte for vim)
     use { 'moll/vim-bbye'}
-    
+
     -- Indent Blankline
     -- Adds indentation guides to all lines
     use { 'lukas-reineke/indent-blankline.nvim' }
