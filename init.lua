@@ -1,6 +1,11 @@
 print("Welcome back to Kubuntu Linux Neovim Ryan!");
 require('mapx').setup{global = true}
 
+-- Header files 
+require("configs.intelephense")
+require("configs.cmake")
+
+-- Default vim configs
 vim.opt.list = true
 vim.o.encoding="utf8"
 vim.o.number = true
@@ -36,7 +41,7 @@ vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
 vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = false, -- True adds line errors, false removes them
+    virtual_lines = true, -- True adds line errors, false removes them
 
 })
 vim.cmd([[syntax off]])
@@ -53,6 +58,7 @@ if has('termguicolors')
     vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
     vim.cmd([[:let g:gruvbox_material_enable_bold = 1 ]])
     vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
+    
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
     vim.cmd([[:colorscheme gruvbox-material]])
@@ -411,7 +417,6 @@ require('lualine').setup {
     }
 }
 
-
 -----------------------REMAPS---------------------------------------------------
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', builtin.git_files, {})
@@ -449,10 +454,11 @@ nnoremap("tk", ":VimtexCompile <Enter>")
 nnoremap("te", ":VimtexErrors <Enter>")
 end)
 
+-- LSP SQL config --
 require('lspconfig').sqls.setup{
     on_attach = function(client, bufnr)
         require('sqls').on_attach(client, bufnr)
-    end
+    end,
 }
 
 -- Underlines the current Cursorline position
