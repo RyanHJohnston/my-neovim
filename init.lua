@@ -1,19 +1,15 @@
-print("Welcome back to Kubuntu Linux Neovim Ryan!");
-require('mapx').setup{global = true}
-
--- Header files 
-require("configs.intelephense")
-require("configs.cmake")
+require('mapx').setup { global = true }
 
 -- Default vim configs
+vim.cmd([[set number]])
 vim.opt.list = true
-vim.o.encoding="utf8"
+vim.o.encoding = "utf8"
 vim.o.number = true
 vim.o.textwidth = 80
 vim.o.colorcolumn = "80"
 vim.o.autoindent = true
 vim.o.tabstop = 4
-vim.o.shiftwidth=4 -- changes the indent size
+vim.o.shiftwidth = 4 -- changes the indent size
 vim.o.mouse = "a"
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
@@ -42,12 +38,11 @@ vim.opt.listchars:append "eol:↴"
 vim.diagnostic.config({
     virtual_text = false,
     virtual_lines = true, -- True adds line errors, false removes them
-
 })
-vim.cmd([[syntax off]])
+vim.cmd([[syntax on]])
 
 vim.cmd([[
-if has('termguicolors') 
+if has('termguicolors')
     set termguicolors
     endif
     ]])
@@ -56,9 +51,9 @@ if has('termguicolors')
     vim.o.background = "dark"
     vim.cmd([[:let g:gruvbox_material_background = 'hard']])
     vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
-    vim.cmd([[:let g:gruvbox_material_enable_bold = 1 ]])
+    vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
     vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
-    
+
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
     vim.cmd([[:colorscheme gruvbox-material]])
@@ -99,6 +94,9 @@ if has('termguicolors')
             run = ':call doge#install()'
         }
 
+        -- View pdfs in neovim terminal
+        use { 'dsanson/termpdf.py' }
+
         -- Fancy looking errors plugin
         -- Actively shows where the errors are
         use({
@@ -112,23 +110,23 @@ if has('termguicolors')
 
 
         -- Improved tabs (Bybye, Buffer Byte for vim)
-        use { 'moll/vim-bbye'}
+        use { 'moll/vim-bbye' }
 
         -- Indent Blankline
         -- Adds indentation guides to all lines
         use { 'lukas-reineke/indent-blankline.nvim' }
 
         -- Allows to run MySQL queries from the editor
-        -- asynchronously. You can run a query, continue 
+        -- asynchronously. You can run a query, continue
         -- working, and have the results shown to you as soon
-        -- as the query is finished. nvim-mysql is like a 
+        -- as the query is finished. nvim-mysql is like a
         -- simpler, editor-based version of MySQL Workbench.
         use { 'jobo3208/nvim-mysql' }
 
         use 'nanotee/sqls.nvim'
 
         -- Foldtext, folds functions and sets of code.
-        use{ 'anuvyklack/pretty-fold.nvim',
+        use { 'anuvyklack/pretty-fold.nvim',
         config = function()
             require('pretty-fold').setup()
         end
@@ -156,18 +154,18 @@ if has('termguicolors')
                     close = "q", -- close the list
                     cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
                     refresh = "r", -- manually refresh
-                    jump = {"<cr>", "<tab>"}, -- jump to the diagnostic or open / close folds
+                    jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
                     open_split = { "<c-x>" }, -- open buffer in new split
                     open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
                     open_tab = { "<c-t>" }, -- open buffer in new tab
-                    jump_close = {"o"}, -- jump to the diagnostic and close the list
+                    jump_close = { "o" }, -- jump to the diagnostic and close the list
                     toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
                     toggle_preview = "P", -- toggle auto_preview
                     hover = "K", -- opens a small popup with the full multiline message
                     preview = "p", -- preview the diagnostic location
-                    close_folds = {"zM", "zm"}, -- close all folds
-                    open_folds = {"zR", "zr"}, -- open all folds
-                    toggle_fold = {"zA", "za"}, -- toggle fold of current file
+                    close_folds = { "zM", "zm" }, -- close all folds
+                    open_folds = { "zR", "zr" }, -- open all folds
+                    toggle_fold = { "zA", "za" }, -- toggle fold of current file
                     previous = "k", -- previous item
                     next = "j" -- next item
                 },
@@ -176,7 +174,7 @@ if has('termguicolors')
                 auto_close = false, -- automatically close the list when you have no diagnostics
                 auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
                 auto_fold = false, -- automatically fold a file trouble list at creation
-                auto_jump = {"lsp_definitions"}, -- for the given modes, automatically jump if there is only a single result
+                auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
                 signs = {
                     -- icons / text used for a diagnostic
                     error = "",
@@ -186,7 +184,7 @@ if has('termguicolors')
                     other = "﫠"
                 },
                 use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
-            } 
+            }
         }
     end
 }
@@ -207,20 +205,22 @@ use { 'wesgibbs/vim-irblack' }
 use { 'jdsimcoe/hyper.vim' }
 use { 'thedenisnikulin/vim-cyberpunk' }
 use { 'vv9k/vim-github-dark' }
+use { 'rebelot/kanagawa.nvim' }
+use { 'folke/tokyonight.nvim' }
 
--- Telescope (File Finder) -- 
+-- Telescope (File Finder) --
 use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
     -- or                            , branch = '0.1.x',
-    requires = { {'nvim-lua/plenary.nvim'} }
+    requires = { { 'nvim-lua/plenary.nvim' } }
 }
 
 -- ToggleTerm (Integrated Terminal)
-use {"akinsho/toggleterm.nvim", tag = '*', config = function()
+use { "akinsho/toggleterm.nvim", tag = '*', config = function()
     require("toggleterm").setup({
 
     })
-end}
+end }
 
 -- Nvim-Tree (File Manager) --
 use {
@@ -231,7 +231,7 @@ use {
     tag = 'nightly' -- optional, updated every week. (see issue #1193)
 }
 
-require'nvim-web-devicons'.setup {
+require 'nvim-web-devicons'.setup {
     -- your personnal icons can go here (to override)
     -- you can specify color or cterm_color instead of specifying both of them
     -- DevIcon will be appended to `name`
@@ -242,18 +242,18 @@ require'nvim-web-devicons'.setup {
             cterm_color = "65",
             name = "Zsh"
         }
-    };
+    },
     -- globally enable different highlight colors per icon (default to true)
     -- if set to false all icons will have the default icon's color
-    color_icons = true;
+    color_icons = true,
     -- globally enable default icons (default to false)
     -- will get overriden by `get_icons` option
-    default = true;
+    default = true,
 }
 
 -- Baerbar.nvim (Tabs) --
 -- This is dependent on 'nvim-tree/nvim-web-devicons'
-use {'romgrk/barbar.nvim', wants = 'nvim-web-devicons'}
+use { 'romgrk/barbar.nvim', wants = 'nvim-web-devicons' }
 
 -- Mapx.nvim (Easier key mappings) --
 -- This makes the key mappings for commands much easier
@@ -261,9 +261,9 @@ use {'romgrk/barbar.nvim', wants = 'nvim-web-devicons'}
 use "b0o/mapx.nvim"
 
 
--- Treesitter -- 
-use ('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
-use ('nvim-treesitter/playground')
+-- Treesitter --
+use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+use('nvim-treesitter/playground')
 
 -- LSP Zero (Language Server Protocol) --
 -- Very important for autocompletion
@@ -271,32 +271,32 @@ use {
     'VonHeikemen/lsp-zero.nvim',
     requires = {
         -- LSP Support
-        {'neovim/nvim-lspconfig'},
-        {'williamboman/mason.nvim'},
-        {'williamboman/mason-lspconfig.nvim'},
+        { 'neovim/nvim-lspconfig' },
+        { 'williamboman/mason.nvim' },
+        { 'williamboman/mason-lspconfig.nvim' },
 
         -- Autocompletion
-        {'hrsh7th/nvim-cmp'},
-        {'hrsh7th/cmp-buffer'},
-        {'hrsh7th/cmp-path'},
-        {'saadparwaiz1/cmp_luasnip'},
-        {'hrsh7th/cmp-nvim-lsp'},
-        {'hrsh7th/cmp-nvim-lua'},
+        { 'hrsh7th/nvim-cmp' },
+        { 'hrsh7th/cmp-buffer' },
+        { 'hrsh7th/cmp-path' },
+        { 'saadparwaiz1/cmp_luasnip' },
+        { 'hrsh7th/cmp-nvim-lsp' },
+        { 'hrsh7th/cmp-nvim-lua' },
 
         -- Snippets
-        {'L3MON4D3/LuaSnip'},
-        {'rafamadriz/friendly-snippets'},
+        { 'L3MON4D3/LuaSnip' },
+        { 'rafamadriz/friendly-snippets' },
     }
 }
 
--- Improved jdtls lsp Java nvim experience 
+-- Improved jdtls lsp Java nvim experience
 use 'mfussenegger/nvim-jdtls'
 
-require'nvim-treesitter.configs'.setup {
+require 'nvim-treesitter.configs'.setup {
     -- This is where you will get your much needed Autocompletion
     -- So far, this is the only config that has working Java autocompletion
     -- A list of parser names, or "all"
-    ensure_installed = { "help", "javascript", "typescript", "java", "c", "lua", 
+    ensure_installed = { "help", "javascript", "typescript", "java", "c", "lua",
     "rust", "python", "bash" },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -323,24 +323,11 @@ require'nvim-treesitter.configs'.setup {
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 lsp.setup()
-lsp.ensure_installed ({
-    'tsserver',
-    'eslint',
-    'sumneko_lua',
-    'rust_analyzer',
-    'jdtls',
-    'html',
-    'clangd',
-    'texlab',
-    'bash-language-server',
-    'grammarly-languageserver',
-    'powershell-editor-services',
-})
 local cmp = require('cmp')
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
-lsp.set_preferences({sign_icons={}})
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
+lsp.set_preferences({ sign_icons = {} })
 
-require('nvim-tree').setup{}
+require('nvim-tree').setup {}
 require('gruvbox').setup({
     undercurl = true,
     underline = true,
@@ -368,12 +355,12 @@ require('indent_blankline').setup {
 }
 
 -- Lualine Config --
-require('lualine').setup ({
+require('lualine').setup({
     options = {
         icons_enabled = true,
         theme = 'auto',
-        component_separators = { left = '', right = ''},
-        section_separators = { left = '', right = ''},
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
         disabled_filetypes = {
             statusline = {},
             winbar = {},
@@ -388,29 +375,28 @@ require('lualine').setup ({
         }
     },
     sections = {
-        lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff', 'diagnostics'},
-        lualine_c = {'filename'},
-        lualine_x = {'encoding', 'fileformat', 'filetype'},
-        lualine_y = {'progress'},
-        lualine_z = {'location'}
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch', 'diff', 'diagnostics' },
+        lualine_c = { 'filename' },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' }
     },
     inactive_sections = {
         lualine_a = {},
         lualine_b = {},
-        lualine_c = {'filename'},
-        lualine_x = {'location'},
+        lualine_c = { 'filename' },
+        lualine_x = { 'location' },
         lualine_y = {},
         lualine_z = {}
     },
     tabline = {},
     winbar = {},
     inactive_winbar = {},
-    extensions = {'quickfix', 'toggleterm', 'man'}
-
+    extensions = { 'quickfix', 'toggleterm', 'man' }
 })
 
--- Lualine config 
+-- Lualine config
 require('lualine').setup {
     options = {
         theme = 'gruvbox-material',
@@ -427,39 +413,39 @@ end)
 
 -- ToggleTerm and NvimTreeToggle mappings
 --  require'mapx'.setup{ global = true }[TODO:description]
-nnoremap ("f", ":NvimTreeToggle <Enter>")
-nnoremap ("T", ":ToggleTerm direction=horizontal size=25 <Enter>")
-nnoremap ("TV", ":ToggleTerm direction=vertical size=100 <Enter>")
-nnoremap ("TF", ":ToggleTerm direction=float <Enter>")
+nnoremap("f", ":NvimTreeToggle <Enter>")
+nnoremap("T", ":ToggleTerm direction=horizontal size=25 <Enter>")
+nnoremap("TV", ":ToggleTerm direction=vertical size=100 <Enter>")
+nnoremap("TF", ":ToggleTerm direction=float <Enter>")
 
 -- Tabs mappings
-nnoremap ("n", ":BufferPrevious <Enter>")
-nnoremap ("m", ":BufferNext <Enter>")
-for index=1 , 9 do
-    nnoremap (tostring(index), 
+nnoremap("n", ":BufferPrevious <Enter>")
+nnoremap("m", ":BufferNext <Enter>")
+for index = 1, 9 do
+    nnoremap(tostring(index),
     ":BufferGoto " .. tostring(index) .. " <Enter>")
 end
 
 -- Auto-generate comments
-nnoremap ("CC", ":DogeGenerate <Tab> <Enter>")
+nnoremap("CC", ":DogeGenerate <Tab> <Enter>")
 
 -- Telescope commands to make navigation easier
-nnoremap ("rr", ":Telescope find_files <Enter>")
+nnoremap("rr", ":Telescope find_files <Enter>")
 
 -- Shows errors
 nnoremap("er", ":TroubleToggle <Enter>")
 
--- Vimtex commands 
+-- Vimtex commands
 nnoremap("tk", ":VimtexCompile <Enter>")
 nnoremap("te", ":VimtexErrors <Enter>")
 end)
 
--- LSP SQL config --
-require('lspconfig').sqls.setup{
-    on_attach = function(client, bufnr)
-        require('sqls').on_attach(client, bufnr)
-    end,
+-- PHP Intelephense LSP config
+require('lspconfig').intelephense.setup{
+    "intelephense", "--stdio", "php"
 }
 
 -- Underlines the current Cursorline position
 vim.cmd([[hi CursorLine gui=underline cterm=underline]])
+
+
