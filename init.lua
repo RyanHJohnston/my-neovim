@@ -5,8 +5,8 @@ vim.cmd([[set number]])
 vim.opt.list = true
 vim.o.encoding = "utf8"
 vim.o.number = true
-vim.o.textwidth = 80
-vim.o.colorcolumn = "80"
+vim.o.textwidth = 100
+vim.o.colorcolumn = "90"
 vim.o.autoindent = true
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4 -- changes the indent size
@@ -56,7 +56,7 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme gruvbox-material]])
+    vim.cmd([[:colorscheme tokyonight-night]])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
