@@ -5,7 +5,7 @@ vim.cmd([[set number]])
 vim.opt.list = true
 vim.o.encoding = "utf8"
 vim.o.number = true
-vim.o.textwidth = 100
+-- vim.o.textwidth = 100
 vim.o.colorcolumn = "90"
 vim.o.autoindent = true
 vim.o.tabstop = 4
@@ -37,7 +37,7 @@ vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
 vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = true, -- True adds line errors, false removes them
+    virtual_lines = false, -- True adds line errors, false removes them
 })
 vim.cmd([[syntax on]])
 
@@ -56,13 +56,12 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme tokyonight-night]])
+    vim.cmd([[:colorscheme vscode]])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
     vim.cmd([[:let g:vimtex_view_general_viewer = 'okular']])
     vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
-
 
     --------------------------------PLUGINS----------------------------------------
     require('packer').startup(function(use)
