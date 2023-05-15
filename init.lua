@@ -58,7 +58,7 @@ if has('termguicolors')
 
 	vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
 	vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-	vim.cmd([[:colorscheme gruvbox-material]])
+	vim.cmd([[:colorscheme vscode]])
 	-- vim.cmd([[:set guicursor=i:block]])
 
 	-- vimtex plugin config
@@ -448,5 +448,6 @@ require('lspconfig').intelephense.setup{
 
 -- Underlines the current Cursorline position
 vim.cmd([[hi CursorLine gui=underline cterm=underline]])
+
 
 
