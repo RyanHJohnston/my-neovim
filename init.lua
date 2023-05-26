@@ -106,7 +106,50 @@ if has('termguicolors')
                 require("lsp_lines").setup()
             end,
         })
-        
+
+        -- nvim-navic (Statusline/winbar component that uses LSP to show current code)
+        use {
+            "SmiteshP/nvim-navic",
+            requires = "neovim/nvim-lspconfig",
+        }
+
+        local navic = require("nvim-navic")
+
+        require("lspconfig").clangd.setup {
+            auto_attach = function(client, bufnr)
+                navic.attach(client, bufnr)
+            end
+        }
+
+
+        -- nvim-navbuddy (popup display that provides breadcrumbs like nav feature)
+        use {
+            "SmiteshP/nvim-navbuddy",
+            requires = {
+                "MunifTanjim/nui.nvim",
+                "numToStr/Comment.nvim",        -- Optional
+            }
+        }
+
+        local navbuddy = require("nvim-navbuddy")
+
+        require("lspconfig").clangd.setup {
+            on_attach = function(client, bufnr)
+                navbuddy.attach(client, bufnr)
+            end
+        }
+
+
+        -- which-key (displays popup with possible key bindings of the command you started typing)
+        use {
+            "folke/which-key.nvim",
+            config = function()
+                vim.o.timeout = true
+                vim.o.timeoutlen = 300
+                require("which-key").setup {}
+            end
+        }
+
         -- LSP Config --
         local lsp = require('lsp-zero').preset({})
         lsp.on_attach(function(client,bufnr)
@@ -292,6 +335,18 @@ use {
     tag = 'nightly' -- optional, updated every week. (see issue #1193)
 }
 
+-- NeoTree (Better File Manager) --
+use {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v2.x',
+    requires = {
+        'nvim-lua/plenary.nvim',
+        'nvim-tree/nvim-web-devicons', -- not required, but recommended
+        'MunifTanjim/nui.nvim',
+    }
+}
+
+
 require 'nvim-web-devicons'.setup {
     -- your personnal icons can go here (to override)
     -- you can specify color or cterm_color instead of specifying both of them
@@ -462,7 +517,7 @@ require('lualine').setup({
 -- Lualine config
 require('lualine').setup {
     options = {
-        theme = 'gruvbox-material',
+        theme = 'codedark',
     }
 }
 
@@ -475,8 +530,10 @@ vim.keymap.set('n', '<leader>ps', function()
 end)
 
 -- ToggleTerm and NvimTreeToggle mappings
---  require'mapx'.setup{ global = true }[TODO:description]
-nnoremap("f", ":NvimTreeToggle <Enter>")
+--  require'mapx'.setup{ global = true }
+
+nnoremap("f", ":Neotree <Enter>") -- changed to Neotree command
+nnoremap("ff", ":NeoTreeClose <Enter>")
 nnoremap("T", ":ToggleTerm direction=horizontal size=25 <Enter>")
 nnoremap("TV", ":ToggleTerm direction=vertical size=100 <Enter>")
 nnoremap("TF", ":ToggleTerm direction=float <Enter>")
