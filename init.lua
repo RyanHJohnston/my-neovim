@@ -1,5 +1,6 @@
 require('mapx').setup { global = true }
 
+-- cute greeting message
 print('Welcome to Neovim on Arch Linux!')
 
 -- Default vim configs
@@ -39,7 +40,7 @@ vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
 vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = false, -- True adds line errors, false removes them
+    virtual_lines = true, -- True adds line errors, false removes them
 })
 vim.cmd([[syntax on]])
 
@@ -58,7 +59,7 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme vscode]])
+    vim.cmd([[:colorscheme github_dark_dimmed]])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
@@ -139,6 +140,44 @@ if has('termguicolors')
             end
         }
 
+
+        -- nvim-scrollview (displays interactive vertical scrollbars and signs)
+        use { 'dstein64/nvim-scrollview' }
+
+        -- easyread.nvim (bionic-like reading in neovim)
+        use { 'JellyApple102/easyread.nvim' }
+
+        -- easyread.nvim default config
+        require('easyread').setup{
+            hlValues = {
+                ['1'] = 1,
+                ['2'] = 1,
+                ['3'] = 2,
+                ['4'] = 2,
+                ['fallback'] = 0.4
+            },
+            hlgroupOptions = { link = 'Bold' },
+            fileTypes = { 'text' },
+            saccadeInterval = 0,
+            saccadeReset = false,
+            updateWhileInsert = true
+        }
+
+        -- github-nvim-theme (self-explanatory, it's a pretty github theme for neovim)
+        -- Install without configuration
+        use ({ 'projekt0n/github-nvim-theme' })
+
+        -- Or with configuration
+        use({
+            'projekt0n/github-nvim-theme',
+            config = function()
+                require('github-theme').setup({
+                    -- ...
+                })
+
+                vim.cmd('colorscheme github_dark')
+            end
+        })
 
         -- which-key (displays popup with possible key bindings of the command you started typing)
         use {
