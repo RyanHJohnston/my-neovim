@@ -31,6 +31,7 @@ vim.signcolumn = "yes"
 vim.o.updatetime = 50
 vim.g.mapleader = " "
 vim.o.nu = true
+vim.o.background="light" -- changes the background color of the editor
 vim.cmd([[hi CursorLine gui=underline cterm=underline]])
 -- vim.o.guicursor= "v-c-sm:block,n-i-ci-ve:ver25,r-cr-o:hor20"
 vim.g.loaded_netrw = 1
@@ -51,7 +52,6 @@ if has('termguicolors')
     ]])
 
     -- gruvbox-material config --
-    vim.o.background = "dark"
     vim.cmd([[:let g:gruvbox_material_background = 'hard']])
     vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
     vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
@@ -59,7 +59,7 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme github_dark_dimmed]])
+    vim.cmd([[:colorscheme breezy]])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
@@ -167,18 +167,6 @@ if has('termguicolors')
         -- Install without configuration
         use ({ 'projekt0n/github-nvim-theme' })
 
-        -- Or with configuration
-        use({
-            'projekt0n/github-nvim-theme',
-            config = function()
-                require('github-theme').setup({
-                    -- ...
-                })
-
-                vim.cmd('colorscheme github_dark')
-            end
-        })
-
         -- which-key (displays popup with possible key bindings of the command you started typing)
         use {
             "folke/which-key.nvim",
@@ -278,7 +266,7 @@ if has('termguicolors')
     -- Shows errors in a much easier way
     use {
         "folke/trouble.nvim",
-        requires = "kyazdani42/nvim-web-devicons",
+        requires = "nvim-tree/nvim-web-devicons",
         config = function()
             require("trouble").setup {
                 {
@@ -350,6 +338,7 @@ use { 'thedenisnikulin/vim-cyberpunk' }
 use { 'vv9k/vim-github-dark' }
 use { 'rebelot/kanagawa.nvim' }
 use { 'folke/tokyonight.nvim' }
+use { 'fneu/breezy' }
 
 -- Telescope (File Finder) --
 use {
@@ -361,7 +350,7 @@ use {
 -- ToggleTerm (Integrated Terminal)
 use { "akinsho/toggleterm.nvim", tag = '*', config = function()
     require("toggleterm").setup({
-
+        -- toggleterm config goes here
     })
 end }
 
@@ -385,8 +374,8 @@ use {
     }
 }
 
-
-require 'nvim-web-devicons'.setup {
+use {'nvim-tree/nvim-web-devicons'}
+require'nvim-web-devicons'.setup {
     -- your personnal icons can go here (to override)
     -- you can specify color or cterm_color instead of specifying both of them
     -- DevIcon will be appended to `name`
@@ -397,18 +386,162 @@ require 'nvim-web-devicons'.setup {
             cterm_color = "65",
             name = "Zsh"
         }
-    },
+    };
     -- globally enable different highlight colors per icon (default to true)
     -- if set to false all icons will have the default icon's color
-    color_icons = true,
+    color_icons = true;
     -- globally enable default icons (default to false)
     -- will get overriden by `get_icons` option
-    default = true,
+    default = true;
+    -- globally enable "strict" selection of icons - icon will be looked up in
+    -- different tables, first by filename, and if not found by extension; this
+    -- prevents cases when file doesn't have any extension but still gets some icon
+    -- because its name happened to match some extension (default to false)
+    strict = true;
+    -- same as `override` but specifically for overrides by filename
+    -- takes effect when `strict` is true
+    override_by_filename = {
+        [".gitignore"] = {
+            icon = "",
+            color = "#f1502f",
+            name = "Gitignore"
+        }
+    };
+    -- same as `override` but specifically for overrides by extension
+    -- takes effect when `strict` is true
+    override_by_extension = {
+        ["log"] = {
+            icon = "",
+            color = "#81e043",
+            name = "Log"
+        }
+    };
 }
 
 -- Baerbar.nvim (Tabs) --
 -- This is dependent on 'nvim-tree/nvim-web-devicons'
-use { 'romgrk/barbar.nvim', wants = 'nvim-web-devicons' }
+use { 'romgrk/barbar.nvim', wants = 'nvim-tree/nvim-web-devicons' }
+
+require'barbar'.setup {
+    -- WARN: do not copy everything below into your config!
+    --       It is just an example of what configuration options there are.
+    --       The defaults are suitable for most people.
+
+    -- Enable/disable animations
+    animation = true,
+
+    -- Enable/disable auto-hiding the tab bar when there is a single buffer
+    auto_hide = false,
+
+    -- Enable/disable current/total tabpages indicator (top right corner)
+    tabpages = true,
+
+    -- Enables/disable clickable tabs
+    --  - left-click: go to buffer
+    --  - middle-click: delete buffer
+    clickable = true,
+
+    -- A buffer to this direction will be focused (if it exists) when closing the current buffer.
+    -- Valid options are 'left' (the default), 'previous', and 'right'
+    focus_on_close = 'left',
+
+    -- Disable highlighting alternate buffers
+    highlight_alternate = false,
+
+    -- Disable highlighting file icons in inactive buffers
+    highlight_inactive_file_icons = false,
+
+    -- Enable highlighting visible buffers
+    highlight_visible = true,
+
+    icons = {
+        -- Configure the base icons on the bufferline.
+        -- Valid options to display the buffer index and -number are `true`, 'superscript' and 'subscript'
+        buffer_index = true,
+        buffer_number = true,
+        button = '',
+        -- Enables / disables diagnostic symbols
+        diagnostics = {
+            [vim.diagnostic.severity.ERROR] = {enabled = true, icon = 'ﬀ'},
+            [vim.diagnostic.severity.WARN] = {enabled = true},
+            [vim.diagnostic.severity.INFO] = {enabled = true},
+            [vim.diagnostic.severity.HINT] = {enabled = true},
+        },
+        gitsigns = {
+            added = {enabled = true, icon = '+'},
+            changed = {enabled = true, icon = '~'},
+            deleted = {enabled = true, icon = '-'},
+        },
+        filetype = {
+            -- Sets the icon's highlight group.
+            -- If false, will use nvim-web-devicons colors
+            custom_colors = true,
+
+            -- Requires `nvim-web-devicons` if `true`
+            enabled = true,
+        },
+        separator = {left = '▎', right = ''},
+
+        -- Configure the icons on the bufferline when modified or pinned.
+        -- Supports all the base icon options.
+        modified = {button = '●'},
+        pinned = {button = '', filename = true},
+
+        -- Use a preconfigured buffer appearance— can be 'default', 'powerline', or 'slanted'
+        preset = 'default',
+
+        -- Configure the icons on the bufferline based on the visibility of a buffer.
+        -- Supports all the base icon options, plus `modified` and `pinned`.
+        alternate = {filetype = {enabled = false}},
+        current = {buffer_index = true},
+        inactive = {button = '×'},
+        visible = {modified = {buffer_number = false}},
+    },
+
+    -- If true, new buffers will be inserted at the start/end of the list.
+    -- Default is to insert after current buffer.
+    insert_at_end = false,
+    insert_at_start = false,
+
+    -- Sets the maximum padding width with which to surround each tab
+    maximum_padding = 1,
+
+    -- Sets the minimum padding width with which to surround each tab
+    minimum_padding = 1,
+
+    -- Sets the maximum buffer name length.
+    maximum_length = 30,
+
+    -- Sets the minimum buffer name length.
+    minimum_length = 0,
+
+    -- If set, the letters for each buffer in buffer-pick mode will be
+    -- assigned based on their name. Otherwise or in case all letters are
+    -- already assigned, the behavior is to assign letters in order of
+    -- usability (see order below)
+    semantic_letters = true,
+
+    -- Set the filetypes which barbar will offset itself for
+    sidebar_filetypes = {
+        -- Use the default values: {event = 'BufWinLeave', text = nil}
+        NvimTree = true,
+        -- Or, specify the text used for the offset:
+        undotree = {text = 'undotree'},
+        -- Or, specify the event which the sidebar executes when leaving:
+        ['neo-tree'] = {event = 'BufWipeout'},
+        -- Or, specify both
+        Outline = {event = 'BufWinLeave', text = 'symbols-outline'},
+    },
+
+    -- New buffer letters are assigned in this order. This order is
+    -- optimal for the qwerty keyboard layout but might need adjustment
+    -- for other layouts.
+    letters = 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP',
+
+    -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
+    -- where X is the buffer number. But only a static string is accepted here.
+    no_name_title = nil,
+}
 
 -- Mapx.nvim (Easier key mappings) --
 -- This makes the key mappings for commands much easier
