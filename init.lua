@@ -3,6 +3,9 @@ require('mapx').setup { global = true }
 -- cute greeting message
 print('Welcome to Neovim on Arch Linux!')
 
+-- keeps the cursor as a block when in insert mode
+-- vim.cmd([[:set guicursor=i:block]])
+
 -- Default vim configs
 vim.cmd([[set number]])
 vim.opt.list = true
@@ -31,7 +34,7 @@ vim.signcolumn = "yes"
 vim.o.updatetime = 50
 vim.g.mapleader = " "
 vim.o.nu = true
-vim.o.background="light" -- changes the background color of the editor
+vim.o.background="dark" -- changes the background color of the editor
 vim.cmd([[hi CursorLine gui=underline cterm=underline]])
 -- vim.o.guicursor= "v-c-sm:block,n-i-ci-ve:ver25,r-cr-o:hor20"
 vim.g.loaded_netrw = 1
@@ -59,7 +62,7 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme breezy]])
+    vim.cmd([[:colorscheme vscode]])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
@@ -339,6 +342,7 @@ use { 'vv9k/vim-github-dark' }
 use { 'rebelot/kanagawa.nvim' }
 use { 'folke/tokyonight.nvim' }
 use { 'fneu/breezy' }
+use { "bluz71/vim-moonfly-colors", as = "moonfly"  }
 
 -- Telescope (File Finder) --
 use {
