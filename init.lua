@@ -180,6 +180,9 @@ if has('termguicolors')
             end
         }
 
+        
+
+
         -- LSP Config --
         local lsp = require('lsp-zero').preset({})
         lsp.on_attach(function(client,bufnr)
@@ -343,6 +346,7 @@ use { 'rebelot/kanagawa.nvim' }
 use { 'folke/tokyonight.nvim' }
 use { 'fneu/breezy' }
 use { "bluz71/vim-moonfly-colors", as = "moonfly"  }
+use { "dasupradyumna/midnight.nvim" }
 
 -- Telescope (File Finder) --
 use {
