@@ -44,7 +44,7 @@ vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
 vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = true, -- True adds line errors, false removes them
+    virtual_lines = false, -- True adds line errors, false removes them
 })
 vim.cmd([[syntax on]])
 
@@ -62,7 +62,7 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme vscode]])
+    vim.cmd([[:colorscheme moonfly]])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
@@ -143,6 +143,11 @@ if has('termguicolors')
             end
         }
 
+        -- jupyter notebook plugin for neovim
+        use {
+            'glacambre/firenvim',
+            run = function() vim.fn['firenvim#install'](0) end 
+        }
 
         -- nvim-scrollview (displays interactive vertical scrollbars and signs)
         use { 'dstein64/nvim-scrollview' }
@@ -180,7 +185,7 @@ if has('termguicolors')
             end
         }
 
-        
+
 
 
         -- LSP Config --
@@ -347,6 +352,7 @@ use { 'folke/tokyonight.nvim' }
 use { 'fneu/breezy' }
 use { "bluz71/vim-moonfly-colors", as = "moonfly"  }
 use { "dasupradyumna/midnight.nvim" }
+use { "bluz71/vim-nightfly-colors", as = "nightfly" }
 
 -- Telescope (File Finder) --
 use {
