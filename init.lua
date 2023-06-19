@@ -1,5 +1,12 @@
 require('mapx').setup { global = true }
 
+-- List of things to do to make the editor fucking awesome:
+-- • Add a debugger plugin that uses breakpoints and logging
+-- • Organize all of your plugins into logic file structures (i.e. plugins,configs, etc)
+-- • Find out how to get latex to work (dear god it's so difficult on arch)
+-- • Make unique configs for your plugins
+-- • Find a solution for your plugins not installing correctly for other linux installations
+
 -- cute greeting message
 print('Welcome to Neovim on Arch Linux!')
 
@@ -66,7 +73,7 @@ if has('termguicolors')
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
-    vim.cmd([[:let g:vimtex_view_general_viewer = 'okular']])
+    vim.cmd([[:let g:vimtex_view_general_viewer = 'mupdf']])
     vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
 
     --------------------------------PLUGINS----------------------------------------
@@ -80,7 +87,6 @@ if has('termguicolors')
 
         -- Adds icons to EVERYTHING
         use { "ryanoasis/vim-devicons" }
-
 
         -- Vim sugar for the UNIX shell commands that need it most.
         -- You can CRUD in your current filesystem.
