@@ -69,9 +69,9 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme moonfly]])
+    vim.cmd([[:colorscheme gruvbox-material]])
     -- vim.cmd([[:set guicursor=i:block]])
-
+    
     -- vimtex plugin config
     vim.cmd([[:let g:vimtex_view_general_viewer = 'mupdf']])
     vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
@@ -150,10 +150,10 @@ if has('termguicolors')
         }
 
         -- jupyter notebook plugin for neovim
-        use {
-            'glacambre/firenvim',
-            run = function() vim.fn['firenvim#install'](0) end 
-        }
+        use { 'dccsillag/magma-nvim', run = ':UpdateRemotePlugins' }
+        nnoremap("<C-Enter>", ":MagmaEvaluateLine <Enter>")
+        nnoremap("<C-Del>", ":MagmaDelete <Enter>")
+        nnoremap("<C-Shift>", ":<C-U> MagmaEvaluateVisual <Enter>")
 
         -- nvim-scrollview (displays interactive vertical scrollbars and signs)
         use { 'dstein64/nvim-scrollview' }
@@ -709,7 +709,7 @@ require('lualine').setup({
 -- Lualine config
 require('lualine').setup {
     options = {
-        theme = 'codedark',
+        theme = 'gruvbox',
     }
 }
 
