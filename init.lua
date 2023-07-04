@@ -69,9 +69,9 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme gruvbox-material]])
+    vim.cmd([[:colorscheme vscode]])
     -- vim.cmd([[:set guicursor=i:block]])
-    
+
     -- vimtex plugin config
     vim.cmd([[:let g:vimtex_view_general_viewer = 'mupdf']])
     vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
@@ -131,6 +131,10 @@ if has('termguicolors')
             end
         }
 
+        -- Extensions needed for the jupyter notebook extension
+        use { 'kana/vim-textobj-user' }
+        use {'Vigemus/iron.nvim'}
+        use { 'goerz/jupytext.vim' }
 
         -- nvim-navbuddy (popup display that provides breadcrumbs like nav feature)
         use {
@@ -150,10 +154,34 @@ if has('termguicolors')
         }
 
         -- jupyter notebook plugin for neovim
-        use { 'dccsillag/magma-nvim', run = ':UpdateRemotePlugins' }
-        nnoremap("<C-Enter>", ":MagmaEvaluateLine <Enter>")
-        nnoremap("<C-Del>", ":MagmaDelete <Enter>")
-        nnoremap("<C-Shift>", ":<C-U> MagmaEvaluateVisual <Enter>")
+        use { 'dccsillag/magma-nvim', 
+                run = ':UpdateRemotePlugins',
+                vim.api.nvim_set_keymap('n','<C-Enter>',':MagmaEvaluateLine<Enter>', 
+                    { noremap = true, silent }),
+                vim.api.nvim_set_keymap('v','<C-Enter>',':<C-u>MagmaEvaluateVisual<Enter>',
+                    { noremap = true, silent }),
+                vim.api.nvim_set_keymap('v','<C-Backspace>',':<C-u>MagmaDelete<Enter>',
+                    { noremap = true, silent }),
+                vim.api.nvim_set_keymap('n','<C-o>',':<C-u>MagmaShowOutput<Enter>',
+                    { noremap = true, silent }),
+                vim.api.nvim_set_keymap('v','<C-r>',':<C-u>MagmaReevaluateCell<Enter>',
+                    { noremap = true, silent }),
+                vim.api.nvim_set_keymap('n','mg',':MagmaInit python3<Enter>',
+                    { noremap = true, silent }),
+                vim.cmd([[:let g:magma_image_provider = "kitty"]]),
+                vim.cmd([[:let g:magma_output_window_borders = v:true]]),
+                vim.cmd([[:let magma_cell_highlight_group = "CursorLine"]])
+            }
+        
+        -- Terminal image viewer, supports kitty graphics protocol
+        use { '/edluffy/hologram.nvim' }
+        require('hologram').setup {
+            auto_display = true -- WIP automatic markdown image display, may be prone to breaking
+        }
+
+        -- Pretty notifications
+        use { 'rcarriga/nvim-notify' }
+        vim.notify = require("notify")
 
         -- nvim-scrollview (displays interactive vertical scrollbars and signs)
         use { 'dstein64/nvim-scrollview' }
@@ -707,9 +735,10 @@ require('lualine').setup({
 })
 
 -- Lualine config
+-- The bar at the bottom of the editor
 require('lualine').setup {
     options = {
-        theme = 'gruvbox',
+        theme = 'vscode',
     }
 }
 
