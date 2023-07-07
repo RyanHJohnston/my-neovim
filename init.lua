@@ -1,14 +1,13 @@
 require('mapx').setup { global = true }
 
--- List of things to do to make the editor fucking awesome:
+-- List of things to do to make the editor awesome:
 -- • Add a debugger plugin that uses breakpoints and logging
 -- • Organize all of your plugins into logic file structures (i.e. plugins,configs, etc)
 -- • Find out how to get latex to work (dear god it's so difficult on arch)
 -- • Make unique configs for your plugins
 -- • Find a solution for your plugins not installing correctly for other linux installations
 
--- cute greeting message
-print('Welcome to Neovim on Arch Linux!')
+-- GOAL: Make a lightweight vim IDE
 
 -- keeps the cursor as a block when in insert mode
 -- vim.cmd([[:set guicursor=i:block]])
@@ -51,7 +50,7 @@ vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
 vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = false, -- True adds line errors, false removes them
+    virtual_lines = true, -- True adds line errors, false removes them
 })
 vim.cmd([[syntax on]])
 
@@ -62,13 +61,13 @@ if has('termguicolors')
     ]])
 
     -- gruvbox-material config --
-    vim.cmd([[:let g:gruvbox_material_background = 'hard']])
-    vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
-    vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
-    vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
+    --    vim.cmd([[:let g:gruvbox_material_background = 'hard']])
+    --    vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
+    --    vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
+    --    vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
 
-    vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
-    vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
+    --    vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
+    --    vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
     vim.cmd([[:colorscheme vscode]])
     -- vim.cmd([[:set guicursor=i:block]])
 
@@ -131,6 +130,7 @@ if has('termguicolors')
             end
         }
 
+       
         -- Extensions needed for the jupyter notebook extension
         use { 'kana/vim-textobj-user' }
         use {'Vigemus/iron.nvim'}
@@ -155,208 +155,355 @@ if has('termguicolors')
 
         -- jupyter notebook plugin for neovim
         use { 'dccsillag/magma-nvim', 
-                run = ':UpdateRemotePlugins',
-                vim.api.nvim_set_keymap('n','<C-Enter>',':MagmaEvaluateLine<Enter>', 
-                    { noremap = true, silent }),
-                vim.api.nvim_set_keymap('v','<C-Enter>',':<C-u>MagmaEvaluateVisual<Enter>',
-                    { noremap = true, silent }),
-                vim.api.nvim_set_keymap('v','<C-Backspace>',':<C-u>MagmaDelete<Enter>',
-                    { noremap = true, silent }),
-                vim.api.nvim_set_keymap('n','<C-o>',':<C-u>MagmaShowOutput<Enter>',
-                    { noremap = true, silent }),
-                vim.api.nvim_set_keymap('v','<C-r>',':<C-u>MagmaReevaluateCell<Enter>',
-                    { noremap = true, silent }),
-                vim.api.nvim_set_keymap('n','mg',':MagmaInit python3<Enter>',
-                    { noremap = true, silent }),
-                vim.cmd([[:let g:magma_image_provider = "kitty"]]),
-                vim.cmd([[:let g:magma_output_window_borders = v:true]]),
-                vim.cmd([[:let magma_cell_highlight_group = "CursorLine"]])
-            }
-        
-        -- Pretty notifications
-        use { 'rcarriga/nvim-notify' }
-        vim.notify = require("notify")
-
-        -- nvim-scrollview (displays interactive vertical scrollbars and signs)
-        use { 'dstein64/nvim-scrollview' }
-
-        -- easyread.nvim (bionic-like reading in neovim)
-        use { 'JellyApple102/easyread.nvim' }
-
-        -- easyread.nvim default config
-        require('easyread').setup{
-            hlValues = {
-                ['1'] = 1,
-                ['2'] = 1,
-                ['3'] = 2,
-                ['4'] = 2,
-                ['fallback'] = 0.4
-            },
-            hlgroupOptions = { link = 'Bold' },
-            fileTypes = { 'text' },
-            saccadeInterval = 0,
-            saccadeReset = false,
-            updateWhileInsert = true
-        }
-
-        -- github-nvim-theme (self-explanatory, it's a pretty github theme for neovim)
-        -- Install without configuration
-        use ({ 'projekt0n/github-nvim-theme' })
-
-        -- which-key (displays popup with possible key bindings of the command you started typing)
-        use {
-            "folke/which-key.nvim",
-            config = function()
-                vim.o.timeout = true
-                vim.o.timeoutlen = 300
-                require("which-key").setup {}
-            end
-        }
-
-
-
-
-        -- LSP Config --
-        local lsp = require('lsp-zero').preset({})
-        lsp.on_attach(function(client,bufnr)
-            lsp.default_keymaps({buffer = bufnr})
-        end)
-
-        lsp.setup()
-
-        local cmp = require('cmp')
-        local cmp_action = require('lsp-zero').cmp_action()
-
-        cmp.setup({
-
-            manage_nvim_cmp = {
-                set_sources = 'lsp',
-                set_basic_mappings = true,
-                set_extra_mappings = true,
-                use_luasnip = true,
-                set_format = true,
-                documentation_window = true,
-            },
-
-            sources = {
-                {name = 'nvim_lsp'},
-                {name = 'nvim_lua'},
-            },
-
-            mapping = {
-                ['<CR>'] = cmp.mapping.confirm({select = false}),
-                ['<Tab>'] = cmp_action.luasnip_supertab(),
-                ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-                ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-                ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-            },
-
-            window = {
-                completion = cmp.config.window.bordered(),
-                documentation = cmp.config.window.bordered(),
-            },
-
-            formatting = {
-                -- changing the order of fields so the icon is the first
-                fields = {'menu', 'abbr', 'kind'},
-
-                -- here is where the change happens
-                format = function(entry, item)
-                    local menu_icon = {
-                        nvim_lsp = 'λ',
-                        luasnip = '⋗',
-                        buffer = 'Ω',
-                        path = '🖫',
-                        nvim_lua = 'Π',
-                    }
-
-                    item.menu = menu_icon[entry.source.name]
-                    return item
-                end,
-            },
-        })
-
-        -- End of LSP Config --
-
-
-        -- Improved tabs (Bybye, Buffer Byte for vim)
-        use { 'moll/vim-bbye' }
-
-        -- Indent Blankline
-        -- Adds indentation guides to all lines
-        use { 'lukas-reineke/indent-blankline.nvim' }
-
-        -- Allows to run MySQL queries from the editor
-        -- asynchronously. You can run a query, continue
-        -- working, and have the results shown to you as soon
-        -- as the query is finished. nvim-mysql is like a
-        -- simpler, editor-based version of MySQL Workbench.
-        use { 'jobo3208/nvim-mysql' }
-
-        use 'nanotee/sqls.nvim'
-
-        -- Foldtext, folds functions and sets of code.
-        use { 'anuvyklack/pretty-fold.nvim',
-        config = function()
-            require('pretty-fold').setup()
-        end
+        run = ':UpdateRemotePlugins',
+        vim.api.nvim_set_keymap('n','<C-Enter>',':MagmaEvaluateLine<Enter>', 
+        { noremap = true, silent }),
+        vim.api.nvim_set_keymap('v','<C-Enter>',':<C-u>MagmaEvaluateVisual<Enter>',
+        { noremap = true, silent }),
+        vim.api.nvim_set_keymap('v','<C-Backspace>',':<C-u>MagmaDelete<Enter>',
+        { noremap = true, silent }),
+        vim.api.nvim_set_keymap('n','<C-o>',':<C-u>MagmaShowOutput<Enter>',
+        { noremap = true, silent }),
+        vim.api.nvim_set_keymap('v','<C-r>',':<C-u>MagmaReevaluateCell<Enter>',
+        { noremap = true, silent }),
+        vim.api.nvim_set_keymap('n','mg',':MagmaInit python3<Enter>',
+        { noremap = true, silent }),
+        vim.cmd([[:let g:magma_image_provider = "kitty"]]),
+        vim.cmd([[:let g:magma_output_window_borders = v:true]]),
+        vim.cmd([[:let magma_cell_highlight_group = "CursorLine"]])
     }
 
-    -- Shows errors in a much easier way
-    use {
-        "folke/trouble.nvim",
-        requires = "nvim-tree/nvim-web-devicons",
-        config = function()
-            require("trouble").setup {
-                {
-                    position = "bottom", -- position of the list can be: bottom, top, left, right
-                    height = 10, -- height of the trouble list when position is top or bottom
-                    width = 50, -- width of the list when position is left or right
-                    icons = true, -- use devicons for filenames
-                    mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
-                    fold_open = "", -- icon used for open folds
-                    fold_closed = "", -- icon used for closed folds
-                    group = true, -- group results by file
-                    padding = true, -- add an extra new line on top of the list
-                    action_keys = { -- key mappings for actions in the trouble list
-                    -- map to {} to remove a mapping, for example:
-                    -- close = {},
-                    close = "q", -- close the list
-                    cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
-                    refresh = "r", -- manually refresh
-                    jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
-                    open_split = { "<c-x>" }, -- open buffer in new split
-                    open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
-                    open_tab = { "<c-t>" }, -- open buffer in new tab
-                    jump_close = { "o" }, -- jump to the diagnostic and close the list
-                    toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
-                    toggle_preview = "P", -- toggle auto_preview
-                    hover = "K", -- opens a small popup with the full multiline message
-                    preview = "p", -- preview the diagnostic location
-                    close_folds = { "zM", "zm" }, -- close all folds
-                    open_folds = { "zR", "zr" }, -- open all folds
-                    toggle_fold = { "zA", "za" }, -- toggle fold of current file
-                    previous = "k", -- previous item
-                    next = "j" -- next item
-                },
-                indent_lines = true, -- add an indent guide below the fold icons
-                auto_open = false, -- automatically open the list when you have diagnostics
-                auto_close = false, -- automatically close the list when you have no diagnostics
-                auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-                auto_fold = false, -- automatically fold a file trouble list at creation
-                auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
-                signs = {
-                    -- icons / text used for a diagnostic
-                    error = "",
-                    warning = "",
-                    hint = "",
-                    information = "",
-                    other = "﫠"
-                },
-                use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
-            }
-        }
+    -- Pretty notifications
+    use { 'rcarriga/nvim-notify' }
+    vim.notify = require("notify")
+    vim.notify.setup {
+        background_color = "NotifyBackground",
+        fps = 30,
+        icons = {
+            DEBUG = "",
+            ERROR = "",
+            INFO = "",
+            TRACE = "✎",
+            WARN = ""
+        },
+        level = 2,
+        minimum_width = 50,
+        title = "My Plugin",
+        render = "minimal",
+        stages = "fade_in_slide_out",
+        timeout = 5000,
+        top_down = false,
+        animate = true
+    }
+
+    local function notify_output(command, opts)
+        local output = ""
+        local notification
+        local notify = function(msg, level)
+            local notify_opts = vim.tbl_extend(
+            "keep",
+            opts or {},
+            { title = table.concat(command, " "), replace = notification }
+            )
+            notification = vim.notify(msg, level, notify_opts)
+        end
+        local on_data = function(_, data)
+            output = output .. table.concat(data, "\n")
+            notify(output, "info")
+        end
+        vim.fn.jobstart(command, {
+            on_stdout = on_data,
+            on_stderr = on_data,
+            on_exit = function(_, code)
+                if #output == 0 then
+                    notify("No output of command, exit code: " .. code, "warn")
+                end
+            end,
+        })
     end
+
+    notify_output({ "echo", "Thank you for using my Neovim config, hope you enjoy!\n - Ryan H. Johnston" })
+
+    -- Utility functions shared between progress reports for LSP and DAP
+
+    local client_notifs = {}
+
+    local function get_notif_data(client_id, token)
+        if not client_notifs[client_id] then
+            client_notifs[client_id] = {}
+        end
+
+        if not client_notifs[client_id][token] then
+            client_notifs[client_id][token] = {}
+        end
+
+        return client_notifs[client_id][token]
+    end
+
+
+    local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
+
+    local function update_spinner(client_id, token)
+        local notif_data = get_notif_data(client_id, token)
+
+        if notif_data.spinner then
+            local new_spinner = (notif_data.spinner + 1) % #spinner_frames
+            notif_data.spinner = new_spinner
+
+            notif_data.notification = vim.notify(nil, nil, {
+                hide_from_history = true,
+                icon = spinner_frames[new_spinner],
+                replace = notif_data.notification,
+            })
+
+            vim.defer_fn(function()
+                update_spinner(client_id, token)
+            end, 100)
+        end
+    end
+
+    local function format_title(title, client_name)
+        return client_name .. (#title > 0 and ": " .. title or "")
+    end
+
+    local function format_message(message, percentage)
+        return (percentage and percentage .. "%\t" or "") .. (message or "")
+    end
+
+    -- LSP integration
+    -- Make sure to also have the snippet with the common helper functions in your config!
+
+    vim.lsp.handlers["$/progress"] = function(_, result, ctx)
+        local client_id = ctx.client_id
+
+        local val = result.value
+
+        if not val.kind then
+            return
+        end
+
+        local notif_data = get_notif_data(client_id, result.token)
+
+        if val.kind == "begin" then
+            local message = format_message(val.message, val.percentage)
+
+            notif_data.notification = vim.notify(message, "info", {
+                title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
+                icon = spinner_frames[1],
+                timeout = false,
+                hide_from_history = false,
+            })
+
+            notif_data.spinner = 1
+            update_spinner(client_id, result.token)
+        elseif val.kind == "report" and notif_data then
+            notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
+                replace = notif_data.notification,
+                hide_from_history = false,
+            })
+        elseif val.kind == "end" and notif_data then
+        notif_data.notification =
+        vim.notify(val.message and format_message(val.message) or "Complete", "info", {
+            icon = "",
+            replace = notif_data.notification,
+            timeout = 3000,
+        })
+
+        notif_data.spinner = nil
+    end
+end
+
+-- table from lsp severity to vim severity.
+local severity = {
+    "error",
+    "warn",
+    "info",
+    "info", -- map both hint and info to info?
+}
+vim.lsp.handlers["window/showMessage"] = function(err, method, params, client_id)
+    vim.notify(method.message, severity[params.type])
+end
+
+-- nvim-scrollview (displays interactive vertical scrollbars and signs)
+use { 'dstein64/nvim-scrollview' }
+
+-- easyread.nvim (bionic-like reading in neovim)
+use { 'JellyApple102/easyread.nvim' }
+
+-- easyread.nvim default config
+require('easyread').setup{
+    hlValues = {
+        ['1'] = 1,
+        ['2'] = 1,
+        ['3'] = 2,
+        ['4'] = 2,
+        ['fallback'] = 0.4
+    },
+    hlgroupOptions = { link = 'Bold' },
+    fileTypes = { 'text' },
+    saccadeInterval = 0,
+    saccadeReset = false,
+    updateWhileInsert = true
+}
+
+-- github-nvim-theme (self-explanatory, it's a pretty github theme for neovim)
+-- Install without configuration
+use ({ 'projekt0n/github-nvim-theme' })
+
+-- which-key (displays popup with possible key bindings of the command you started typing)
+use {
+    "folke/which-key.nvim",
+    config = function()
+        vim.o.timeout = true
+        vim.o.timeoutlen = 300
+        require("which-key").setup {}
+    end
+}
+
+
+
+
+-- LSP Config --
+local lsp = require('lsp-zero').preset({})
+lsp.on_attach(function(client,bufnr)
+    lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup()
+
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+
+cmp.setup({
+
+    manage_nvim_cmp = {
+        set_sources = 'lsp',
+        set_basic_mappings = true,
+        set_extra_mappings = true,
+        use_luasnip = true,
+        set_format = true,
+        documentation_window = true,
+    },
+
+    sources = {
+        {name = 'nvim_lsp'},
+        {name = 'nvim_lua'},
+    },
+
+    mapping = {
+        ['<CR>'] = cmp.mapping.confirm({select = false}),
+        ['<Tab>'] = cmp_action.luasnip_supertab(),
+        ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
+        ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+        ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    },
+
+    window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
+
+    formatting = {
+        -- changing the order of fields so the icon is the first
+        fields = {'menu', 'abbr', 'kind'},
+
+        -- here is where the change happens
+        format = function(entry, item)
+            local menu_icon = {
+                nvim_lsp = 'λ',
+                luasnip = '⋗',
+                buffer = 'Ω',
+                path = '🖫',
+                nvim_lua = 'Π',
+            }
+
+            item.menu = menu_icon[entry.source.name]
+            return item
+        end,
+    },
+})
+
+-- End of LSP Config --
+
+
+-- Improved tabs (Bybye, Buffer Byte for vim)
+use { 'moll/vim-bbye' }
+
+-- Indent Blankline
+-- Adds indentation guides to all lines
+use { 'lukas-reineke/indent-blankline.nvim' }
+
+-- Allows to run MySQL queries from the editor
+-- asynchronously. You can run a query, continue
+-- working, and have the results shown to you as soon
+-- as the query is finished. nvim-mysql is like a
+-- simpler, editor-based version of MySQL Workbench.
+use { 'jobo3208/nvim-mysql' }
+
+use 'nanotee/sqls.nvim'
+
+-- Foldtext, folds functions and sets of code.
+use { 'anuvyklack/pretty-fold.nvim',
+config = function()
+    require('pretty-fold').setup()
+end
+}
+
+-- Shows errors in a much easier way
+use {
+    "folke/trouble.nvim",
+    requires = "nvim-tree/nvim-web-devicons",
+    config = function()
+        require("trouble").setup {
+            {
+                position = "bottom", -- position of the list can be: bottom, top, left, right
+                height = 10, -- height of the trouble list when position is top or bottom
+                width = 50, -- width of the list when position is left or right
+                icons = true, -- use devicons for filenames
+                mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+                fold_open = "", -- icon used for open folds
+                fold_closed = "", -- icon used for closed folds
+                group = true, -- group results by file
+                padding = true, -- add an extra new line on top of the list
+                action_keys = { -- key mappings for actions in the trouble list
+                -- map to {} to remove a mapping, for example:
+                -- close = {},
+                close = "q", -- close the list
+                cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
+                refresh = "r", -- manually refresh
+                jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
+                open_split = { "<c-x>" }, -- open buffer in new split
+                open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
+                open_tab = { "<c-t>" }, -- open buffer in new tab
+                jump_close = { "o" }, -- jump to the diagnostic and close the list
+                toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
+                toggle_preview = "P", -- toggle auto_preview
+                hover = "K", -- opens a small popup with the full multiline message
+                preview = "p", -- preview the diagnostic location
+                close_folds = { "zM", "zm" }, -- close all folds
+                open_folds = { "zR", "zr" }, -- open all folds
+                toggle_fold = { "zA", "za" }, -- toggle fold of current file
+                previous = "k", -- previous item
+                next = "j" -- next item
+            },
+            indent_lines = true, -- add an indent guide below the fold icons
+            auto_open = false, -- automatically open the list when you have diagnostics
+            auto_close = false, -- automatically close the list when you have no diagnostics
+            auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+            auto_fold = false, -- automatically fold a file trouble list at creation
+            auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
+            signs = {
+                -- icons / text used for a diagnostic
+                error = "",
+                warning = "",
+                hint = "",
+                information = "",
+                other = "﫠"
+            },
+            use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+        }
+    }
+end
 }
 
 -- LaTeX plugin --
@@ -364,8 +511,7 @@ use { 'lervag/vimtex' }
 
 -- COLORSCHEMES
 use { 'Mofiqul/vscode.nvim' }
-use { "ellisonleao/gruvbox.nvim" }
-use { 'sainnhe/gruvbox-material' }
+-- use { 'sainnhe/gruvbox-material' }
 use { 'sainnhe/everforest' }
 use { 'rose-pine/neovim' }
 use { 'rafi/awesome-vim-colorschemes' }
@@ -660,23 +806,6 @@ local cmp_select = { behavior = cmp.SelectBehavior.Select }
 lsp.set_preferences({ sign_icons = {} })
 
 require('nvim-tree').setup {}
-require('gruvbox').setup({
-    undercurl = true,
-    underline = true,
-    bold = true,
-    italic = true,
-    strikethrough = true,
-    invert_selection = false,
-    invert_signs = false,
-    invert_tabline = false,
-    invert_intend_guides = false,
-    inverse = true, -- invert background for search, diffs, statuslines and errors
-    contrast = "", -- can be "hard", "soft" or empty string
-    palette_overrides = {},
-    overrides = {},
-    dim_inactive = false,
-    transparent_mode = false,
-})
 
 -- Indent Blankline Config --
 require('indent_blankline').setup {
