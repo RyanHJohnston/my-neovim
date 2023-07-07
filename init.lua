@@ -173,12 +173,6 @@ if has('termguicolors')
                 vim.cmd([[:let magma_cell_highlight_group = "CursorLine"]])
             }
         
-        -- Terminal image viewer, supports kitty graphics protocol
-        use { '/edluffy/hologram.nvim' }
-        require('hologram').setup {
-            auto_display = true -- WIP automatic markdown image display, may be prone to breaking
-        }
-
         -- Pretty notifications
         use { 'rcarriga/nvim-notify' }
         vim.notify = require("notify")
