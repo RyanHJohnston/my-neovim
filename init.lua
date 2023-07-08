@@ -50,7 +50,7 @@ vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"
 vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = true, -- True adds line errors, false removes them
+    virtual_lines = false, -- True adds line errors, false removes them
 })
 vim.cmd([[syntax on]])
 
@@ -130,7 +130,7 @@ if has('termguicolors')
             end
         }
 
-       
+
         -- Extensions needed for the jupyter notebook extension
         use { 'kana/vim-textobj-user' }
         use {'Vigemus/iron.nvim'}
@@ -222,7 +222,7 @@ if has('termguicolors')
         })
     end
 
-    notify_output({ "echo", "Thank you for using my Neovim config, hope you enjoy!\n - Ryan H. Johnston" })
+    notify_output({ "echo", "Welcome to Neovim on Arch! 🙂" })
 
     -- Utility functions shared between progress reports for LSP and DAP
 
