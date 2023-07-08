@@ -1,1 +1,2 @@
-'sudo apt-get update'
+# My Neovim Configuration
+A full description of how to use my setup coming soon.
