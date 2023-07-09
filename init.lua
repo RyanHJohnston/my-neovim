@@ -221,11 +221,12 @@ if has('termguicolors')
             end,
         })
     end
-
-    notify_output({ "echo", "Welcome to Neovim on Arch! 🙂" })
+    
+    -- Friendly greeting notification
+    -- Will be used once the editor is available for other users
+    -- notify_output({ "echo", "Welcome to Neovim on Arch! 🙂" })
 
     -- Utility functions shared between progress reports for LSP and DAP
-
     local client_notifs = {}
 
     local function get_notif_data(client_id, token)
