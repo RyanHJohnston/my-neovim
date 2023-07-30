@@ -75,6 +75,8 @@ if has('termguicolors')
     vim.cmd([[:let g:vimtex_view_general_viewer = 'mupdf']])
     vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
 
+
+
     --------------------------------PLUGINS----------------------------------------
     require('packer').startup(function(use)
         use { 'wbthomason/packer.nvim' }
@@ -166,8 +168,6 @@ if has('termguicolors')
         { noremap = true, silent }),
         vim.api.nvim_set_keymap('v','<C-r>',':<C-u>MagmaReevaluateCell<Enter>',
         { noremap = true, silent }),
-        vim.api.nvim_set_keymap('n','mg',':MagmaInit python3<Enter>',
-        { noremap = true, silent }),
         vim.cmd([[:let g:magma_image_provider = "kitty"]]),
         vim.cmd([[:let g:magma_output_window_borders = v:true]]),
         vim.cmd([[:let magma_cell_highlight_group = "CursorLine"]])
@@ -221,290 +221,224 @@ if has('termguicolors')
             end,
         })
     end
-    
-    -- Friendly greeting notification
-    -- Will be used once the editor is available for other users
-    -- notify_output({ "echo", "Welcome to Neovim on Arch! 🙂" })
 
-    -- Utility functions shared between progress reports for LSP and DAP
-    local client_notifs = {}
+    -- table from lsp severity to vim severity.
+    local severity = {
+        "error",
+        "warn",
+        "info",
+        "info", -- map both hint and info to info?
+    }
+    --vim.lsp.handlers["window/showMessage"] = function(err, method, params, client_id)
+        --    vim.notify(method.message, severity[params.type])
+        --end
 
-    local function get_notif_data(client_id, token)
-        if not client_notifs[client_id] then
-            client_notifs[client_id] = {}
+        -- nvim-scrollview (displays interactive vertical scrollbars and signs)
+        use { 'dstein64/nvim-scrollview' }
+
+        -- easyread.nvim (bionic-like reading in neovim)
+        use { 'JellyApple102/easyread.nvim' }
+
+        -- easyread.nvim default config
+        require('easyread').setup{
+            hlValues = {
+                ['1'] = 1,
+                ['2'] = 1,
+                ['3'] = 2,
+                ['4'] = 2,
+                ['fallback'] = 0.4
+            },
+            hlgroupOptions = { link = 'Bold' },
+            fileTypes = { 'text' },
+            saccadeInterval = 0,
+            saccadeReset = false,
+            updateWhileInsert = true
+        }
+
+        -- github-nvim-theme (self-explanatory, it's a pretty github theme for neovim)
+        -- Install without configuration
+        use ({ 'projekt0n/github-nvim-theme' })
+
+        -- which-key (displays popup with possible key bindings of the command you started typing)
+        use {
+            "folke/which-key.nvim",
+            config = function()
+                vim.o.timeout = true
+                vim.o.timeoutlen = 300
+                require("which-key").setup {}
+            end
+        }
+
+        -- Toggles comments in Neovim
+        use { 'terrortylor/nvim-comment' }
+
+        -- This commad prints out the default key commands of nvim-comment
+        -- To execute the funtion, simply type gcch
+        local function print_comment_keymap_help()
+            print("gcc - comment/uncomment current line, does not take count")
+            print("gc{motion} - comment/uncomment selection defined by a motion")
+            print("gcip - comment/uncomment a paragraph")
+            print("gc4w - comment/uncomment current line")
+            print("gc4j - comment/uncomment 4 lines below the current line")
+            print("dic - delete comment block")
+            print("gcic - uncomment commented block")
+            print("")
+            print("Commenting out is as simple as: ")
+            print("visual mode -> highlighting text -> type gcc -> done")
         end
+        _G.print_comment_keymap_help = print_comment_keymap_help
+        vim.api.nvim_set_keymap('n','gcch',':lua print_comment_keymap_help()<Enter>',
+            { noremap = true, silent = true })
+        require('nvim_comment').setup({
+            comment_empty = false, -- ignore empty lines
+            create_mappings = true, -- uses default mappings
+        }) 
+        
 
-        if not client_notifs[client_id][token] then
-            client_notifs[client_id][token] = {}
-        end
-
-        return client_notifs[client_id][token]
-    end
 
 
-    local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
 
-    local function update_spinner(client_id, token)
-        local notif_data = get_notif_data(client_id, token)
+        -- LSP Config --
+        local lsp = require('lsp-zero').preset({})
+        lsp.on_attach(function(client,bufnr)
+            lsp.default_keymaps({buffer = bufnr})
+        end)
 
-        if notif_data.spinner then
-            local new_spinner = (notif_data.spinner + 1) % #spinner_frames
-            notif_data.spinner = new_spinner
+        lsp.setup()
 
-            notif_data.notification = vim.notify(nil, nil, {
-                hide_from_history = true,
-                icon = spinner_frames[new_spinner],
-                replace = notif_data.notification,
-            })
+        local cmp = require('cmp')
+        local cmp_action = require('lsp-zero').cmp_action()
 
-            vim.defer_fn(function()
-                update_spinner(client_id, token)
-            end, 100)
-        end
-    end
+        cmp.setup({
 
-    local function format_title(title, client_name)
-        return client_name .. (#title > 0 and ": " .. title or "")
-    end
+            manage_nvim_cmp = {
+                set_sources = 'lsp',
+                set_basic_mappings = true,
+                set_extra_mappings = true,
+                use_luasnip = true,
+                set_format = true,
+                documentation_window = true,
+            },
 
-    local function format_message(message, percentage)
-        return (percentage and percentage .. "%\t" or "") .. (message or "")
-    end
+            sources = {
+                {name = 'nvim_lsp'},
+                {name = 'nvim_lua'},
+            },
 
-    -- LSP integration
-    -- Make sure to also have the snippet with the common helper functions in your config!
+            mapping = {
+                ['<CR>'] = cmp.mapping.confirm({select = false}),
+                ['<Tab>'] = cmp_action.luasnip_supertab(),
+                ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
+                ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+                ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+            },
 
-    vim.lsp.handlers["$/progress"] = function(_, result, ctx)
-        local client_id = ctx.client_id
+            window = {
+                completion = cmp.config.window.bordered(),
+                documentation = cmp.config.window.bordered(),
+            },
 
-        local val = result.value
+            formatting = {
+                -- changing the order of fields so the icon is the first
+                fields = {'menu', 'abbr', 'kind'},
 
-        if not val.kind then
-            return
-        end
+                -- here is where the change happens
+                format = function(entry, item)
+                    local menu_icon = {
+                        nvim_lsp = 'λ',
+                        luasnip = '⋗',
+                        buffer = 'Ω',
+                        path = '🖫',
+                        nvim_lua = 'Π',
+                    }
 
-        local notif_data = get_notif_data(client_id, result.token)
-
-        if val.kind == "begin" then
-            local message = format_message(val.message, val.percentage)
-
-            notif_data.notification = vim.notify(message, "info", {
-                title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
-                icon = spinner_frames[1],
-                timeout = false,
-                hide_from_history = false,
-            })
-
-            notif_data.spinner = 1
-            update_spinner(client_id, result.token)
-        elseif val.kind == "report" and notif_data then
-            notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
-                replace = notif_data.notification,
-                hide_from_history = false,
-            })
-        elseif val.kind == "end" and notif_data then
-        notif_data.notification =
-        vim.notify(val.message and format_message(val.message) or "Complete", "info", {
-            icon = "",
-            replace = notif_data.notification,
-            timeout = 3000,
+                    item.menu = menu_icon[entry.source.name]
+                    return item
+                end,
+            },
         })
 
-        notif_data.spinner = nil
-    end
-end
-
--- table from lsp severity to vim severity.
-local severity = {
-    "error",
-    "warn",
-    "info",
-    "info", -- map both hint and info to info?
-}
-vim.lsp.handlers["window/showMessage"] = function(err, method, params, client_id)
-    vim.notify(method.message, severity[params.type])
-end
-
--- nvim-scrollview (displays interactive vertical scrollbars and signs)
-use { 'dstein64/nvim-scrollview' }
-
--- easyread.nvim (bionic-like reading in neovim)
-use { 'JellyApple102/easyread.nvim' }
-
--- easyread.nvim default config
-require('easyread').setup{
-    hlValues = {
-        ['1'] = 1,
-        ['2'] = 1,
-        ['3'] = 2,
-        ['4'] = 2,
-        ['fallback'] = 0.4
-    },
-    hlgroupOptions = { link = 'Bold' },
-    fileTypes = { 'text' },
-    saccadeInterval = 0,
-    saccadeReset = false,
-    updateWhileInsert = true
-}
-
--- github-nvim-theme (self-explanatory, it's a pretty github theme for neovim)
--- Install without configuration
-use ({ 'projekt0n/github-nvim-theme' })
-
--- which-key (displays popup with possible key bindings of the command you started typing)
-use {
-    "folke/which-key.nvim",
-    config = function()
-        vim.o.timeout = true
-        vim.o.timeoutlen = 300
-        require("which-key").setup {}
-    end
-}
+        -- End of LSP Config --
 
 
+        -- Improved tabs (Bybye, Buffer Byte for vim)
+        use { 'moll/vim-bbye' }
 
+        -- Indent Blankline
+        -- Adds indentation guides to all lines
+        use { 'lukas-reineke/indent-blankline.nvim' }
 
--- LSP Config --
-local lsp = require('lsp-zero').preset({})
-lsp.on_attach(function(client,bufnr)
-    lsp.default_keymaps({buffer = bufnr})
-end)
+        -- Allows to run MySQL queries from the editor
+        -- asynchronously. You can run a query, continue
+        -- working, and have the results shown to you as soon
+        -- as the query is finished. nvim-mysql is like a
+        -- simpler, editor-based version of MySQL Workbench.
+        use { 'jobo3208/nvim-mysql' }
 
-lsp.setup()
+        use 'nanotee/sqls.nvim'
 
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
-cmp.setup({
-
-    manage_nvim_cmp = {
-        set_sources = 'lsp',
-        set_basic_mappings = true,
-        set_extra_mappings = true,
-        use_luasnip = true,
-        set_format = true,
-        documentation_window = true,
-    },
-
-    sources = {
-        {name = 'nvim_lsp'},
-        {name = 'nvim_lua'},
-    },
-
-    mapping = {
-        ['<CR>'] = cmp.mapping.confirm({select = false}),
-        ['<Tab>'] = cmp_action.luasnip_supertab(),
-        ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-        ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-        ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-    },
-
-    window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
-    },
-
-    formatting = {
-        -- changing the order of fields so the icon is the first
-        fields = {'menu', 'abbr', 'kind'},
-
-        -- here is where the change happens
-        format = function(entry, item)
-            local menu_icon = {
-                nvim_lsp = 'λ',
-                luasnip = '⋗',
-                buffer = 'Ω',
-                path = '🖫',
-                nvim_lua = 'Π',
-            }
-
-            item.menu = menu_icon[entry.source.name]
-            return item
-        end,
-    },
-})
-
--- End of LSP Config --
-
-
--- Improved tabs (Bybye, Buffer Byte for vim)
-use { 'moll/vim-bbye' }
-
--- Indent Blankline
--- Adds indentation guides to all lines
-use { 'lukas-reineke/indent-blankline.nvim' }
-
--- Allows to run MySQL queries from the editor
--- asynchronously. You can run a query, continue
--- working, and have the results shown to you as soon
--- as the query is finished. nvim-mysql is like a
--- simpler, editor-based version of MySQL Workbench.
-use { 'jobo3208/nvim-mysql' }
-
-use 'nanotee/sqls.nvim'
-
--- Foldtext, folds functions and sets of code.
-use { 'anuvyklack/pretty-fold.nvim',
-config = function()
-    require('pretty-fold').setup()
-end
-}
-
--- Shows errors in a much easier way
-use {
-    "folke/trouble.nvim",
-    requires = "nvim-tree/nvim-web-devicons",
-    config = function()
-        require("trouble").setup {
-            {
-                position = "bottom", -- position of the list can be: bottom, top, left, right
-                height = 10, -- height of the trouble list when position is top or bottom
-                width = 50, -- width of the list when position is left or right
-                icons = true, -- use devicons for filenames
-                mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
-                fold_open = "", -- icon used for open folds
-                fold_closed = "", -- icon used for closed folds
-                group = true, -- group results by file
-                padding = true, -- add an extra new line on top of the list
-                action_keys = { -- key mappings for actions in the trouble list
-                -- map to {} to remove a mapping, for example:
-                -- close = {},
-                close = "q", -- close the list
-                cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
-                refresh = "r", -- manually refresh
-                jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
-                open_split = { "<c-x>" }, -- open buffer in new split
-                open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
-                open_tab = { "<c-t>" }, -- open buffer in new tab
-                jump_close = { "o" }, -- jump to the diagnostic and close the list
-                toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
-                toggle_preview = "P", -- toggle auto_preview
-                hover = "K", -- opens a small popup with the full multiline message
-                preview = "p", -- preview the diagnostic location
-                close_folds = { "zM", "zm" }, -- close all folds
-                open_folds = { "zR", "zr" }, -- open all folds
-                toggle_fold = { "zA", "za" }, -- toggle fold of current file
-                previous = "k", -- previous item
-                next = "j" -- next item
-            },
-            indent_lines = true, -- add an indent guide below the fold icons
-            auto_open = false, -- automatically open the list when you have diagnostics
-            auto_close = false, -- automatically close the list when you have no diagnostics
-            auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-            auto_fold = false, -- automatically fold a file trouble list at creation
-            auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
-            signs = {
-                -- icons / text used for a diagnostic
-                error = "",
-                warning = "",
-                hint = "",
-                information = "",
-                other = "﫠"
-            },
-            use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
-        }
+        -- Foldtext, folds functions and sets of code.
+        use { 'anuvyklack/pretty-fold.nvim',
+        config = function()
+            require('pretty-fold').setup()
+        end
     }
-end
+
+    -- Shows errors in a much easier way
+    use {
+        "folke/trouble.nvim",
+        requires = "nvim-tree/nvim-web-devicons",
+        config = function()
+            require("trouble").setup {
+                {
+                    position = "bottom", -- position of the list can be: bottom, top, left, right
+                    height = 10, -- height of the trouble list when position is top or bottom
+                    width = 50, -- width of the list when position is left or right
+                    icons = true, -- use devicons for filenames
+                    mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+                    fold_open = "", -- icon used for open folds
+                    fold_closed = "", -- icon used for closed folds
+                    group = true, -- group results by file
+                    padding = true, -- add an extra new line on top of the list
+                    action_keys = { -- key mappings for actions in the trouble list
+                    -- map to {} to remove a mapping, for example:
+                    -- close = {},
+                    close = "q", -- close the list
+                    cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
+                    refresh = "r", -- manually refresh
+                    jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
+                    open_split = { "<c-x>" }, -- open buffer in new split
+                    open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
+                    open_tab = { "<c-t>" }, -- open buffer in new tab
+                    jump_close = { "o" }, -- jump to the diagnostic and close the list
+                    toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
+                    toggle_preview = "P", -- toggle auto_preview
+                    hover = "K", -- opens a small popup with the full multiline message
+                    preview = "p", -- preview the diagnostic location
+                    close_folds = { "zM", "zm" }, -- close all folds
+                    open_folds = { "zR", "zr" }, -- open all folds
+                    toggle_fold = { "zA", "za" }, -- toggle fold of current file
+                    previous = "k", -- previous item
+                    next = "j" -- next item
+                },
+                indent_lines = true, -- add an indent guide below the fold icons
+                auto_open = false, -- automatically open the list when you have diagnostics
+                auto_close = false, -- automatically close the list when you have no diagnostics
+                auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+                auto_fold = false, -- automatically fold a file trouble list at creation
+                auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
+                signs = {
+                    -- icons / text used for a diagnostic
+                    error = "",
+                    warning = "",
+                    hint = "",
+                    information = "",
+                    other = "﫠"
+                },
+                use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+            }
+        }
+    end
 }
 
 -- LaTeX plugin --
@@ -608,9 +542,15 @@ require'nvim-web-devicons'.setup {
 }
 
 -- Baerbar.nvim (Tabs) --
+-- A tabs plugin
 -- This is dependent on 'nvim-tree/nvim-web-devicons'
-use { 'romgrk/barbar.nvim', wants = 'nvim-tree/nvim-web-devicons' }
-
+use { 'romgrk/barbar.nvim', wants = 'nvim-tree/nvim-web-devicons',
+vim.api.nvim_set_keymap('n','<C-n>','<Cmd>BufferPin<Enter>',
+{ noremap = true, silent }),
+vim.api.nvim_set_keymap('n','<C-d>','<Cmd>BufferDelete<Enter>',
+{ noremap = true, silent }),
+vim.api.nvim_set_keymap('n','<A->>','<Cmd>BufferMoveNext<Enter>',
+{ noremap = true, silent }),
 require'barbar'.setup {
     -- WARN: do not copy everything below into your config!
     --       It is just an example of what configuration options there are.
@@ -731,12 +671,11 @@ require'barbar'.setup {
     -- where X is the buffer number. But only a static string is accepted here.
     no_name_title = nil,
 }
-
+}
 -- Mapx.nvim (Easier key mappings) --
 -- This makes the key mappings for commands much easier
 -- It's supposed to mimic the .vim config
 use "b0o/mapx.nvim"
-
 
 -- Treesitter --
 use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
@@ -766,10 +705,95 @@ use {
     }
 }
 
-
-
 -- Improved jdtls lsp Java nvim experience
 use 'mfussenegger/nvim-jdtls'
+local opts = {
+    cmd = {},
+    settings = {
+        java = {
+            signatureHelp = { enabled = true },
+            completion = {
+                favoriteStaticMembers = {},
+                filteredTypes = {
+                    -- "com.sun.*",
+                    -- "io.micrometer.shaded.*",
+                    -- "java.awt.*",
+                    -- "jdk.*",
+                    -- "sun.*",
+                },
+            },
+            sources = {
+                organizeImports = {
+                    starThreshold = 9999,
+                    staticStarThreshold = 9999,
+                },
+            },
+            codeGeneration = {
+                toString = {
+                    template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
+                },
+                useBlocks = true,
+            },
+            configuration = {
+                runtimes = {
+                    {
+                        name = "JavaSE-1.8",
+                        path = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home",
+                        default = true,
+                    },
+                    {
+                        name = "JavaSE-17",
+                        path = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home",
+                    },
+                    {
+                        name = "JavaSE-19",
+                        path = "/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home",
+                    },
+                },
+            },
+        },
+    },
+}
+
+local function setup()
+    local pkg_status, jdtls = pcall(require,"jdtls")
+    if not pkg_status then
+        vim.notify("unable to load nvim-jdtls", "error")
+        return {}
+    end
+
+    -- local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
+    local jdtls_bin = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
+
+    local root_markers = { ".gradle", "gradlew", ".git" }
+    local root_dir = jdtls.setup.find_root(root_markers)
+    local home = os.getenv("HOME")
+    local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
+    local workspace_dir = home .. "/.cache/jdtls/workspace/" .. project_name
+
+    opts.cmd = {
+        jdtls_bin,
+        "-data",
+        workspace_dir,
+    }
+
+
+    local on_attach = function(client, bufnr)
+        jdtls.setup.add_commands() -- important to ensure you can update configs when build is updated
+        -- if you setup DAP according to https://github.com/mfussenegger/nvim-jdtls#nvim-dap-configuration you can uncomment below
+        -- jdtls.setup_dap({ hotcodereplace = "auto" })
+        -- jdtls.dap.setup_dap_main_class_configs()
+
+        -- you may want to also run your generic on_attach() function used by your LSP config
+    end
+
+    opts.on_attach = on_attach
+    opts.capabilities = vim.lsp.protocol.make_client_capabilities()
+
+    return opts
+end
+
+
 
 require 'nvim-treesitter.configs'.setup {
     -- This is where you will get your much needed Autocompletion
@@ -866,6 +890,22 @@ require('lualine').setup {
     }
 }
 
+-- Edit files remotely from yo`ur local machine
+use {
+    'chipsenkbeil/distant.nvim',
+    branch = 'v0.2',
+    config = function()
+        require('distant').setup {
+            -- Applies Chip's personal settings to every machine you connect to
+            --
+            -- 1. Ensures that distant servers terminate with no connections
+            -- 2. Provides navigation bindings for remote directories
+            -- 3. Provides keybinding to jump into a remote file's parent directory
+            ['*'] = require('distant.settings').chip_default()
+        }
+    end
+}
+
 -----------------------REMAPS---------------------------------------------------
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', builtin.git_files, {})
@@ -873,6 +913,17 @@ vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
 vim.keymap.set('n', '<leader>ps', function()
     builtin.grep_string({ search = vim.fn.input("Grep > ") })
 end)
+
+vim.api.nvim_set_keymap('n','<C-Enter>',':MagmaEvaluateLine<Enter>', 
+{ noremap = true, silent })
+
+-- Script that comments out multiple lines
+
+
+
+
+
+
 
 -- ToggleTerm and NvimTreeToggle mappings
 --  require'mapx'.setup{ global = true }
