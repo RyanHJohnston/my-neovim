@@ -61,13 +61,13 @@ if has('termguicolors')
     ]])
 
     -- gruvbox-material config --
-    --    vim.cmd([[:let g:gruvbox_material_background = 'hard']])
-    --    vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
-    --    vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
-    --    vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
+        vim.cmd([[:let g:gruvbox_material_background = 'hard']])
+        vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
+        vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
+        vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
 
-    --    vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
-    --    vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
+        vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
+        vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
     vim.cmd([[:colorscheme vscode]])
     -- vim.cmd([[:set guicursor=i:block]])
 
@@ -295,9 +295,6 @@ if has('termguicolors')
         }) 
         
 
-
-
-
         -- LSP Config --
         local lsp = require('lsp-zero').preset({})
         lsp.on_attach(function(client,bufnr)
@@ -446,7 +443,7 @@ use { 'lervag/vimtex' }
 
 -- COLORSCHEMES
 use { 'Mofiqul/vscode.nvim' }
--- use { 'sainnhe/gruvbox-material' }
+use { 'sainnhe/gruvbox-material' }
 use { 'sainnhe/everforest' }
 use { 'rose-pine/neovim' }
 use { 'rafi/awesome-vim-colorschemes' }
@@ -793,8 +790,6 @@ local function setup()
     return opts
 end
 
-
-
 require 'nvim-treesitter.configs'.setup {
     -- This is where you will get your much needed Autocompletion
     -- So far, this is the only config that has working Java autocompletion
@@ -890,19 +885,12 @@ require('lualine').setup {
     }
 }
 
--- Edit files remotely from yo`ur local machine
+-- Edit files remotely from your local machine (distant.nvim)
 use {
     'chipsenkbeil/distant.nvim',
-    branch = 'v0.2',
+    branch = 'v0.3',
     config = function()
-        require('distant').setup {
-            -- Applies Chip's personal settings to every machine you connect to
-            --
-            -- 1. Ensures that distant servers terminate with no connections
-            -- 2. Provides navigation bindings for remote directories
-            -- 3. Provides keybinding to jump into a remote file's parent directory
-            ['*'] = require('distant.settings').chip_default()
-        }
+        require('distant'):setup()
     end
 }
 
@@ -941,6 +929,7 @@ for index = 1, 9 do
     nnoremap(tostring(index),
     ":BufferGoto " .. tostring(index) .. " <Enter>")
 end
+
 
 -- Auto-generate comments
 nnoremap("CC", ":DogeGenerate <Tab> <Enter>")
