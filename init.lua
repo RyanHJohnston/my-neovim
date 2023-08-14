@@ -72,8 +72,8 @@ if has('termguicolors')
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
-    vim.cmd([[:let g:vimtex_view_general_viewer = 'mupdf']])
-    vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
+    -- vim.cmd([[:let g:vimtex_view_general_viewer = 'mupdf']])
+    -- vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
 
 
 
@@ -438,8 +438,19 @@ if has('termguicolors')
     end
 }
 
--- LaTeX plugin --
-use { 'lervag/vimtex' }
+-- LaTeX plugin (Vimtex)--
+-- For arch linux, here are the required packages for it to work out of the box
+-- texlive-latex
+-- texlive-latexrecommended 
+-- texlive-latexextra
+-- texlive-binextra # this has the high level compiler latexmk, the default compiler for vimtex
+use { 
+    'lervag/vimtex',
+    opt = true,
+    config = function ()
+        vim.g.vimtex_view_general_viewer = 'okular' -- pdf viewer
+    end,
+}
 
 -- COLORSCHEMES
 use { 'Mofiqul/vscode.nvim' }
@@ -893,6 +904,11 @@ use {
         require('distant'):setup()
     end
 }
+
+-- Debugger tool that has breakpoints and state inspections DAP (Debug Adapter Protocol)
+use { 'mfussenegger/nvim-dap' }
+
+
 
 -----------------------REMAPS---------------------------------------------------
 local builtin = require('telescope.builtin')
