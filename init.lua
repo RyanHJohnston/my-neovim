@@ -446,10 +446,13 @@ if has('termguicolors')
 -- texlive-binextra # this has the high level compiler latexmk, the default compiler for vimtex
 use { 
     'lervag/vimtex',
-    opt = true,
     config = function ()
-        vim.g.vimtex_view_general_viewer = 'okular' -- pdf viewer
+        require('vimtex').setup {}
     end,
+    vim.cmd([[filetype plugin indent on]]),
+    vim.cmd([[:let g:vimtex_compiler_method = 'latexmk']]),
+    vim.api.nvim_set_keymap('n','tk',':Vimtexcompile<Enter>',
+        { noremap = true, silent = true})
 }
 
 -- COLORSCHEMES
