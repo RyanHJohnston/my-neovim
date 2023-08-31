@@ -1,5 +1,6 @@
-require('mapx').setup { global = true }
 
+
+require('mapx').setup { global = true }
 -- List of things to do to make the editor awesome:
 -- • Add a debugger plugin that uses breakpoints and logging
 -- • Organize all of your plugins into logic file structures (i.e. plugins,configs, etc)
@@ -61,19 +62,19 @@ if has('termguicolors')
     ]])
 
     -- gruvbox-material config --
-        vim.cmd([[:let g:gruvbox_material_background = 'hard']])
-        vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
-        vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
-        vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
+    vim.cmd([[:let g:gruvbox_material_background = 'hard']])
+    vim.cmd([[:let g:gruvbox_material_better_performance = 1]])
+    vim.cmd([[:let g:gruvbox_material_enable_bold = 0 ]])
+    vim.cmd([[:let g:gruvbox_material_enable_italic = 1]])
 
-        vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
-        vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
+    vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
+    vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
     vim.cmd([[:colorscheme vscode]])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
-    -- vim.cmd([[:let g:vimtex_view_general_viewer = 'mupdf']])
-    -- vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
+    -- vim.cmd([[:let g:vimtex_view_general_viewer = 'firefox']])
+    vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
 
 
 
@@ -288,12 +289,12 @@ if has('termguicolors')
         end
         _G.print_comment_keymap_help = print_comment_keymap_help
         vim.api.nvim_set_keymap('n','gcch',':lua print_comment_keymap_help()<Enter>',
-            { noremap = true, silent = true })
+        { noremap = true, silent = true })
         require('nvim_comment').setup({
             comment_empty = false, -- ignore empty lines
             create_mappings = true, -- uses default mappings
         }) 
-        
+
 
         -- LSP Config --
         local lsp = require('lsp-zero').preset({})
@@ -398,290 +399,290 @@ if has('termguicolors')
                     group = true, -- group results by file
                     padding = true, -- add an extra new line on top of the list
                     action_keys = { -- key mappings for actions in the trouble list
-                    -- map to {} to remove a mapping, for example:
-                    -- close = {},
-                    close = "q", -- close the list
-                    cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
-                    refresh = "r", -- manually refresh
-                    jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
-                    open_split = { "<c-x>" }, -- open buffer in new split
-                    open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
-                    open_tab = { "<c-t>" }, -- open buffer in new tab
-                    jump_close = { "o" }, -- jump to the diagnostic and close the list
-                    toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
-                    toggle_preview = "P", -- toggle auto_preview
-                    hover = "K", -- opens a small popup with the full multiline message
-                    preview = "p", -- preview the diagnostic location
-                    close_folds = { "zM", "zm" }, -- close all folds
-                    open_folds = { "zR", "zr" }, -- open all folds
-                    toggle_fold = { "zA", "za" }, -- toggle fold of current file
-                    previous = "k", -- previous item
-                    next = "j" -- next item
-                },
-                indent_lines = true, -- add an indent guide below the fold icons
-                auto_open = false, -- automatically open the list when you have diagnostics
-                auto_close = false, -- automatically close the list when you have no diagnostics
-                auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-                auto_fold = false, -- automatically fold a file trouble list at creation
-                auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
-                signs = {
-                    -- icons / text used for a diagnostic
-                    error = "",
-                    warning = "",
-                    hint = "",
-                    information = "",
-                    other = "﫠"
-                },
-                use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+                        -- map to {} to remove a mapping, for example:
+                        -- close = {},
+                        close = "q", -- close the list
+                        cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
+                        refresh = "r", -- manually refresh
+                        jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
+                        open_split = { "<c-x>" }, -- open buffer in new split
+                        open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
+                        open_tab = { "<c-t>" }, -- open buffer in new tab
+                        jump_close = { "o" }, -- jump to the diagnostic and close the list
+                        toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
+                        toggle_preview = "P", -- toggle auto_preview
+                        hover = "K", -- opens a small popup with the full multiline message
+                        preview = "p", -- preview the diagnostic location
+                        close_folds = { "zM", "zm" }, -- close all folds
+                        open_folds = { "zR", "zr" }, -- open all folds
+                        toggle_fold = { "zA", "za" }, -- toggle fold of current file
+                        previous = "k", -- previous item
+                        next = "j" -- next item
+                    },
+                    indent_lines = true, -- add an indent guide below the fold icons
+                    auto_open = false, -- automatically open the list when you have diagnostics
+                    auto_close = false, -- automatically close the list when you have no diagnostics
+                    auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+                    auto_fold = false, -- automatically fold a file trouble list at creation
+                    auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
+                    signs = {
+                        -- icons / text used for a diagnostic
+                        error = "",
+                        warning = "",
+                        hint = "",
+                        information = "",
+                        other = "﫠"
+                    },
+                    use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+                }
             }
-        }
-    end
-}
-
--- LaTeX plugin (Vimtex)--
--- For arch linux, here are the required packages for it to work out of the box
--- texlive-latex
--- texlive-latexrecommended 
--- texlive-latexextra
--- texlive-binextra # this has the high level compiler latexmk, the default compiler for vimtex
-use { 
-    'lervag/vimtex',
-    config = function ()
-        require('vimtex').setup {}
-    end,
-    vim.cmd([[filetype plugin indent on]]),
-    vim.cmd([[:let g:vimtex_compiler_method = 'latexmk']]),
-    vim.api.nvim_set_keymap('n','tk',':Vimtexcompile<Enter>',
-        { noremap = true, silent = true})
-}
-
--- COLORSCHEMES
-use { 'Mofiqul/vscode.nvim' }
-use { 'sainnhe/gruvbox-material' }
-use { 'sainnhe/everforest' }
-use { 'rose-pine/neovim' }
-use { 'rafi/awesome-vim-colorschemes' }
-use { 'kvrohit/mellow.nvim' }
-use { 'elvessousa/sobrio' }
-use { 'wesgibbs/vim-irblack' }
-use { 'jdsimcoe/hyper.vim' }
-use { 'thedenisnikulin/vim-cyberpunk' }
-use { 'vv9k/vim-github-dark' }
-use { 'rebelot/kanagawa.nvim' }
-use { 'folke/tokyonight.nvim' }
-use { 'fneu/breezy' }
-use { "bluz71/vim-moonfly-colors", as = "moonfly"  }
-use { "dasupradyumna/midnight.nvim" }
-use { "bluz71/vim-nightfly-colors", as = "nightfly" }
-
--- Telescope (File Finder) --
-use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.0',
-    -- or                            , branch = '0.1.x',
-    requires = { { 'nvim-lua/plenary.nvim' } }
-}
-
--- ToggleTerm (Integrated Terminal)
-use { "akinsho/toggleterm.nvim", tag = '*', config = function()
-    require("toggleterm").setup({
-        -- toggleterm config goes here
-    })
-end }
-
--- Nvim-Tree (File Manager) --
-use {
-    'nvim-tree/nvim-tree.lua',
-    requires = {
-        'nvim-tree/nvim-web-devicons', -- optional, for file icons
-    },
-    tag = 'nightly' -- optional, updated every week. (see issue #1193)
-}
-
--- NeoTree (Better File Manager) --
-use {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v2.x',
-    requires = {
-        'nvim-lua/plenary.nvim',
-        'nvim-tree/nvim-web-devicons', -- not required, but recommended
-        'MunifTanjim/nui.nvim',
+        end
     }
-}
 
-use {'nvim-tree/nvim-web-devicons'}
-require'nvim-web-devicons'.setup {
-    -- your personnal icons can go here (to override)
-    -- you can specify color or cterm_color instead of specifying both of them
-    -- DevIcon will be appended to `name`
-    override = {
-        zsh = {
-            icon = "",
-            color = "#428850",
-            cterm_color = "65",
-            name = "Zsh"
-        }
-    };
-    -- globally enable different highlight colors per icon (default to true)
-    -- if set to false all icons will have the default icon's color
-    color_icons = true;
-    -- globally enable default icons (default to false)
-    -- will get overriden by `get_icons` option
-    default = true;
-    -- globally enable "strict" selection of icons - icon will be looked up in
-    -- different tables, first by filename, and if not found by extension; this
-    -- prevents cases when file doesn't have any extension but still gets some icon
-    -- because its name happened to match some extension (default to false)
-    strict = true;
-    -- same as `override` but specifically for overrides by filename
-    -- takes effect when `strict` is true
-    override_by_filename = {
-        [".gitignore"] = {
-            icon = "",
-            color = "#f1502f",
-            name = "Gitignore"
-        }
-    };
-    -- same as `override` but specifically for overrides by extension
-    -- takes effect when `strict` is true
-    override_by_extension = {
-        ["log"] = {
-            icon = "",
-            color = "#81e043",
-            name = "Log"
-        }
-    };
-}
+    -- LaTeX plugin (Vimtex)--
+    -- For arch linux, here are the required packages for it to work out of the box
+    -- texlive-latex
+    -- texlive-latexrecommended 
+    -- texlive-latexextra
+    -- texlive-binextra # this has the high level compiler latexmk, the default compiler for vimtex
+    use { 
+        'lervag/vimtex',
+        config = function ()
+            require('vimtex').setup {}
+        end,
+        vim.cmd([[filetype plugin indent on]]),
+        vim.cmd([[:let g:vimtex_compiler_method = 'latexmk']]),
+        vim.api.nvim_set_keymap('n','tk',':Vimtexcompile<Enter>',
+        { noremap = true, silent = true})
+    }
 
--- Baerbar.nvim (Tabs) --
--- A tabs plugin
--- This is dependent on 'nvim-tree/nvim-web-devicons'
-use { 'romgrk/barbar.nvim', wants = 'nvim-tree/nvim-web-devicons',
-vim.api.nvim_set_keymap('n','<C-n>','<Cmd>BufferPin<Enter>',
-{ noremap = true, silent }),
-vim.api.nvim_set_keymap('n','<C-d>','<Cmd>BufferDelete<Enter>',
-{ noremap = true, silent }),
-vim.api.nvim_set_keymap('n','<A->>','<Cmd>BufferMoveNext<Enter>',
-{ noremap = true, silent }),
-require'barbar'.setup {
-    -- WARN: do not copy everything below into your config!
-    --       It is just an example of what configuration options there are.
-    --       The defaults are suitable for most people.
+    -- COLORSCHEMES
+    use { 'Mofiqul/vscode.nvim' }
+    use { 'sainnhe/gruvbox-material' }
+    use { 'sainnhe/everforest' }
+    use { 'rose-pine/neovim' }
+    use { 'rafi/awesome-vim-colorschemes' }
+    use { 'kvrohit/mellow.nvim' }
+    use { 'elvessousa/sobrio' }
+    use { 'wesgibbs/vim-irblack' }
+    use { 'jdsimcoe/hyper.vim' }
+    use { 'thedenisnikulin/vim-cyberpunk' }
+    use { 'vv9k/vim-github-dark' }
+    use { 'rebelot/kanagawa.nvim' }
+    use { 'folke/tokyonight.nvim' }
+    use { 'fneu/breezy' }
+    use { "bluz71/vim-moonfly-colors", as = "moonfly"  }
+    use { "dasupradyumna/midnight.nvim" }
+    use { "bluz71/vim-nightfly-colors", as = "nightfly" }
 
-    -- Enable/disable animations
-    animation = true,
+    -- Telescope (File Finder) --
+    use {
+        'nvim-telescope/telescope.nvim', tag = '0.1.0',
+        -- or                            , branch = '0.1.x',
+        requires = { { 'nvim-lua/plenary.nvim' } }
+    }
 
-    -- Enable/disable auto-hiding the tab bar when there is a single buffer
-    auto_hide = false,
+    -- ToggleTerm (Integrated Terminal)
+    use { "akinsho/toggleterm.nvim", tag = '*', config = function()
+        require("toggleterm").setup({
+            -- toggleterm config goes here
+        })
+    end }
 
-    -- Enable/disable current/total tabpages indicator (top right corner)
-    tabpages = true,
-
-    -- Enables/disable clickable tabs
-    --  - left-click: go to buffer
-    --  - middle-click: delete buffer
-    clickable = true,
-
-    -- A buffer to this direction will be focused (if it exists) when closing the current buffer.
-    -- Valid options are 'left' (the default), 'previous', and 'right'
-    focus_on_close = 'left',
-
-    -- Disable highlighting alternate buffers
-    highlight_alternate = false,
-
-    -- Disable highlighting file icons in inactive buffers
-    highlight_inactive_file_icons = false,
-
-    -- Enable highlighting visible buffers
-    highlight_visible = true,
-
-    icons = {
-        -- Configure the base icons on the bufferline.
-        -- Valid options to display the buffer index and -number are `true`, 'superscript' and 'subscript'
-        buffer_index = true,
-        buffer_number = true,
-        button = '',
-        -- Enables / disables diagnostic symbols
-        diagnostics = {
-            [vim.diagnostic.severity.ERROR] = {enabled = true, icon = 'ﬀ'},
-            [vim.diagnostic.severity.WARN] = {enabled = true},
-            [vim.diagnostic.severity.INFO] = {enabled = true},
-            [vim.diagnostic.severity.HINT] = {enabled = true},
+    -- Nvim-Tree (File Manager) --
+    use {
+        'nvim-tree/nvim-tree.lua',
+        requires = {
+            'nvim-tree/nvim-web-devicons', -- optional, for file icons
         },
-        gitsigns = {
-            added = {enabled = true, icon = '+'},
-            changed = {enabled = true, icon = '~'},
-            deleted = {enabled = true, icon = '-'},
+        tag = 'nightly' -- optional, updated every week. (see issue #1193)
+    }
+
+    -- NeoTree (Better File Manager) --
+    use {
+        'nvim-neo-tree/neo-tree.nvim',
+        branch = 'v2.x',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-tree/nvim-web-devicons', -- not required, but recommended
+            'MunifTanjim/nui.nvim',
+        }
+    }
+
+    use {'nvim-tree/nvim-web-devicons'}
+    require'nvim-web-devicons'.setup {
+        -- your personnal icons can go here (to override)
+        -- you can specify color or cterm_color instead of specifying both of them
+        -- DevIcon will be appended to `name`
+        override = {
+            zsh = {
+                icon = "",
+                color = "#428850",
+                cterm_color = "65",
+                name = "Zsh"
+            }
+        };
+        -- globally enable different highlight colors per icon (default to true)
+        -- if set to false all icons will have the default icon's color
+        color_icons = true;
+        -- globally enable default icons (default to false)
+        -- will get overriden by `get_icons` option
+        default = true;
+        -- globally enable "strict" selection of icons - icon will be looked up in
+        -- different tables, first by filename, and if not found by extension; this
+        -- prevents cases when file doesn't have any extension but still gets some icon
+        -- because its name happened to match some extension (default to false)
+        strict = true;
+        -- same as `override` but specifically for overrides by filename
+        -- takes effect when `strict` is true
+        override_by_filename = {
+            [".gitignore"] = {
+                icon = "",
+                color = "#f1502f",
+                name = "Gitignore"
+            }
+        };
+        -- same as `override` but specifically for overrides by extension
+        -- takes effect when `strict` is true
+        override_by_extension = {
+            ["log"] = {
+                icon = "",
+                color = "#81e043",
+                name = "Log"
+            }
+        };
+    }
+
+    -- Baerbar.nvim (Tabs) --
+    -- A tabs plugin
+    -- This is dependent on 'nvim-tree/nvim-web-devicons'
+    use { 'romgrk/barbar.nvim', wants = 'nvim-tree/nvim-web-devicons',
+    vim.api.nvim_set_keymap('n','<C-n>','<Cmd>BufferPin<Enter>',
+    { noremap = true, silent }),
+    vim.api.nvim_set_keymap('n','<C-d>','<Cmd>BufferDelete<Enter>',
+    { noremap = true, silent }),
+    vim.api.nvim_set_keymap('n','<A->>','<Cmd>BufferMoveNext<Enter>',
+    { noremap = true, silent }),
+    require'barbar'.setup {
+        -- WARN: do not copy everything below into your config!
+        --       It is just an example of what configuration options there are.
+        --       The defaults are suitable for most people.
+
+        -- Enable/disable animations
+        animation = true,
+
+        -- Enable/disable auto-hiding the tab bar when there is a single buffer
+        auto_hide = false,
+
+        -- Enable/disable current/total tabpages indicator (top right corner)
+        tabpages = true,
+
+        -- Enables/disable clickable tabs
+        --  - left-click: go to buffer
+        --  - middle-click: delete buffer
+        clickable = true,
+
+        -- A buffer to this direction will be focused (if it exists) when closing the current buffer.
+        -- Valid options are 'left' (the default), 'previous', and 'right'
+        focus_on_close = 'left',
+
+        -- Disable highlighting alternate buffers
+        highlight_alternate = false,
+
+        -- Disable highlighting file icons in inactive buffers
+        highlight_inactive_file_icons = false,
+
+        -- Enable highlighting visible buffers
+        highlight_visible = true,
+
+        icons = {
+            -- Configure the base icons on the bufferline.
+            -- Valid options to display the buffer index and -number are `true`, 'superscript' and 'subscript'
+            buffer_index = true,
+            buffer_number = true,
+            button = '',
+            -- Enables / disables diagnostic symbols
+            diagnostics = {
+                [vim.diagnostic.severity.ERROR] = {enabled = true, icon = 'ﬀ'},
+                [vim.diagnostic.severity.WARN] = {enabled = true},
+                [vim.diagnostic.severity.INFO] = {enabled = true},
+                [vim.diagnostic.severity.HINT] = {enabled = true},
+            },
+            gitsigns = {
+                added = {enabled = true, icon = '+'},
+                changed = {enabled = true, icon = '~'},
+                deleted = {enabled = true, icon = '-'},
+            },
+            filetype = {
+                -- Sets the icon's highlight group.
+                -- If false, will use nvim-web-devicons colors
+                custom_colors = true,
+
+                -- Requires `nvim-web-devicons` if `true`
+                enabled = true,
+            },
+            separator = {left = '▎', right = ''},
+
+            -- Configure the icons on the bufferline when modified or pinned.
+            -- Supports all the base icon options.
+            modified = {button = '●'},
+            pinned = {button = '', filename = true},
+
+            -- Use a preconfigured buffer appearance— can be 'default', 'powerline', or 'slanted'
+            preset = 'default',
+
+            -- Configure the icons on the bufferline based on the visibility of a buffer.
+            -- Supports all the base icon options, plus `modified` and `pinned`.
+            alternate = {filetype = {enabled = false}},
+            current = {buffer_index = true},
+            inactive = {button = '×'},
+            visible = {modified = {buffer_number = false}},
         },
-        filetype = {
-            -- Sets the icon's highlight group.
-            -- If false, will use nvim-web-devicons colors
-            custom_colors = true,
 
-            -- Requires `nvim-web-devicons` if `true`
-            enabled = true,
+        -- If true, new buffers will be inserted at the start/end of the list.
+        -- Default is to insert after current buffer.
+        insert_at_end = false,
+        insert_at_start = false,
+
+        -- Sets the maximum padding width with which to surround each tab
+        maximum_padding = 1,
+
+        -- Sets the minimum padding width with which to surround each tab
+        minimum_padding = 1,
+
+        -- Sets the maximum buffer name length.
+        maximum_length = 30,
+
+        -- Sets the minimum buffer name length.
+        minimum_length = 0,
+
+        -- If set, the letters for each buffer in buffer-pick mode will be
+        -- assigned based on their name. Otherwise or in case all letters are
+        -- already assigned, the behavior is to assign letters in order of
+        -- usability (see order below)
+        semantic_letters = true,
+
+        -- Set the filetypes which barbar will offset itself for
+        sidebar_filetypes = {
+            -- Use the default values: {event = 'BufWinLeave', text = nil}
+            NvimTree = true,
+            -- Or, specify the text used for the offset:
+            undotree = {text = 'undotree'},
+            -- Or, specify the event which the sidebar executes when leaving:
+            ['neo-tree'] = {event = 'BufWipeout'},
+            -- Or, specify both
+            Outline = {event = 'BufWinLeave', text = 'symbols-outline'},
         },
-        separator = {left = '▎', right = ''},
 
-        -- Configure the icons on the bufferline when modified or pinned.
-        -- Supports all the base icon options.
-        modified = {button = '●'},
-        pinned = {button = '', filename = true},
+        -- New buffer letters are assigned in this order. This order is
+        -- optimal for the qwerty keyboard layout but might need adjustment
+        -- for other layouts.
+        letters = 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP',
 
-        -- Use a preconfigured buffer appearance— can be 'default', 'powerline', or 'slanted'
-        preset = 'default',
-
-        -- Configure the icons on the bufferline based on the visibility of a buffer.
-        -- Supports all the base icon options, plus `modified` and `pinned`.
-        alternate = {filetype = {enabled = false}},
-        current = {buffer_index = true},
-        inactive = {button = '×'},
-        visible = {modified = {buffer_number = false}},
-    },
-
-    -- If true, new buffers will be inserted at the start/end of the list.
-    -- Default is to insert after current buffer.
-    insert_at_end = false,
-    insert_at_start = false,
-
-    -- Sets the maximum padding width with which to surround each tab
-    maximum_padding = 1,
-
-    -- Sets the minimum padding width with which to surround each tab
-    minimum_padding = 1,
-
-    -- Sets the maximum buffer name length.
-    maximum_length = 30,
-
-    -- Sets the minimum buffer name length.
-    minimum_length = 0,
-
-    -- If set, the letters for each buffer in buffer-pick mode will be
-    -- assigned based on their name. Otherwise or in case all letters are
-    -- already assigned, the behavior is to assign letters in order of
-    -- usability (see order below)
-    semantic_letters = true,
-
-    -- Set the filetypes which barbar will offset itself for
-    sidebar_filetypes = {
-        -- Use the default values: {event = 'BufWinLeave', text = nil}
-        NvimTree = true,
-        -- Or, specify the text used for the offset:
-        undotree = {text = 'undotree'},
-        -- Or, specify the event which the sidebar executes when leaving:
-        ['neo-tree'] = {event = 'BufWipeout'},
-        -- Or, specify both
-        Outline = {event = 'BufWinLeave', text = 'symbols-outline'},
-    },
-
-    -- New buffer letters are assigned in this order. This order is
-    -- optimal for the qwerty keyboard layout but might need adjustment
-    -- for other layouts.
-    letters = 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP',
-
-    -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
-    -- where X is the buffer number. But only a static string is accepted here.
-    no_name_title = nil,
-}
+        -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
+        -- where X is the buffer number. But only a static string is accepted here.
+        no_name_title = nil,
+    }
 }
 -- Mapx.nvim (Easier key mappings) --
 -- This makes the key mappings for commands much easier
