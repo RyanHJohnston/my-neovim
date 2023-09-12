@@ -54,6 +54,8 @@ vim.diagnostic.config({
     virtual_lines = false, -- True adds line errors, false removes them
 })
 vim.cmd([[syntax on]])
+vim.cmd([[colorscheme vscode]])
+
 
 vim.cmd([[
 if has('termguicolors')
@@ -69,7 +71,7 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    vim.cmd([[:colorscheme vscode]])
+    -- vim.cmd([[colorscheme onedark])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
