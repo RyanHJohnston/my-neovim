@@ -1,4 +1,15 @@
-
+--  ____                          _       _               _              
+-- |  _ \ _   _  __ _ _ __       | | ___ | |__  _ __  ___| |_ ___  _ __  
+-- | |_) | | | |/ _` | '_ \   _  | |/ _ \| '_ \| '_ \/ __| __/ _ \| '_ \ 
+-- |  _ <| |_| | (_| | | | | | |_| | (_) | | | | | | \__ \ || (_) | | | |
+-- |_| \_\\__, |\__,_|_| |_|  \___/ \___/|_| |_|_| |_|___/\__\___/|_| |_|
+--        |___/                                                          
+--  _   ___     _____ __  __    ____             __ _       
+-- | \ | \ \   / /_ _|  \/  |  / ___|___  _ __  / _(_) __ _ 
+-- |  \| |\ \ / / | || |\/| | | |   / _ \| '_ \| |_| |/ _` |
+-- | |\  | \ V /  | || |  | | | |__| (_) | | | |  _| | (_| |
+-- |_| \_|  \_/  |___|_|  |_|  \____\___/|_| |_|_| |_|\__, |
+--                                                    |___/ 
 
 require('mapx').setup { global = true }
 -- List of things to do to make the editor awesome:
@@ -14,11 +25,10 @@ require('mapx').setup { global = true }
 -- vim.cmd([[:set guicursor=i:block]])
 
 -- Default vim configs
-vim.cmd([[set number]])
 vim.opt.list = true
 vim.o.encoding = "utf8"
 vim.o.number = true
--- vim.o.textwidth = 100
+vim.o.textwidth = 100
 vim.o.colorcolumn = "90"
 vim.o.autoindent = true
 vim.o.tabstop = 4
@@ -71,12 +81,11 @@ if has('termguicolors')
 
     vim.cmd([[:let g:gruvbox_material_diagnostic_text_highlight = 1]])
     vim.cmd([[:let g:gruvbox_material_diagnostic_line_highlight = 1]])
-    -- vim.cmd([[colorscheme onedark])
     -- vim.cmd([[:set guicursor=i:block]])
 
     -- vimtex plugin config
     -- vim.cmd([[:let g:vimtex_view_general_viewer = 'firefox']])
-    vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
+    -- vim.cmd([[:let g:vimtex_compiler_method = 'pdflatex']])
 
 
 
@@ -135,12 +144,6 @@ if has('termguicolors')
             end
         }
 
-
-        -- Extensions needed for the jupyter notebook extension
-        use { 'kana/vim-textobj-user' }
-        use {'Vigemus/iron.nvim'}
-        use { 'goerz/jupytext.vim' }
-
         -- nvim-navbuddy (popup display that provides breadcrumbs like nav feature)
         use {
             "SmiteshP/nvim-navbuddy",
@@ -157,24 +160,6 @@ if has('termguicolors')
                 navbuddy.attach(client, bufnr)
             end
         }
-
-        -- jupyter notebook plugin for neovim
-        use { 'dccsillag/magma-nvim', 
-        run = ':UpdateRemotePlugins',
-        vim.api.nvim_set_keymap('n','<C-Enter>',':MagmaEvaluateLine<Enter>', 
-        { noremap = true, silent }),
-        vim.api.nvim_set_keymap('v','<C-Enter>',':<C-u>MagmaEvaluateVisual<Enter>',
-        { noremap = true, silent }),
-        vim.api.nvim_set_keymap('v','<C-Backspace>',':<C-u>MagmaDelete<Enter>',
-        { noremap = true, silent }),
-        vim.api.nvim_set_keymap('n','<C-o>',':<C-u>MagmaShowOutput<Enter>',
-        { noremap = true, silent }),
-        vim.api.nvim_set_keymap('v','<C-r>',':<C-u>MagmaReevaluateCell<Enter>',
-        { noremap = true, silent }),
-        vim.cmd([[:let g:magma_image_provider = "kitty"]]),
-        vim.cmd([[:let g:magma_output_window_borders = v:true]]),
-        vim.cmd([[:let magma_cell_highlight_group = "CursorLine"]])
-    }
 
     -- Pretty notifications
     use { 'rcarriga/nvim-notify' }
@@ -219,7 +204,7 @@ if has('termguicolors')
             on_stderr = on_data,
             on_exit = function(_, code)
                 if #output == 0 then
-                    notify("No output of command, exit code: " .. code, "warn")
+notify("No output of command, exit code: " .. code, "warn")
                 end
             end,
         })
@@ -366,16 +351,16 @@ if has('termguicolors')
 
         -- Indent Blankline
         -- Adds indentation guides to all lines
+        -- Includes use{} and setup{}
         use { 'lukas-reineke/indent-blankline.nvim' }
-
-        -- Allows to run MySQL queries from the editor
-        -- asynchronously. You can run a query, continue
-        -- working, and have the results shown to you as soon
-        -- as the query is finished. nvim-mysql is like a
-        -- simpler, editor-based version of MySQL Workbench.
-        use { 'jobo3208/nvim-mysql' }
-
-        use 'nanotee/sqls.nvim'
+        require "ibl".update { enabled = false }
+        require("ibl").setup {
+            debounce = 100,
+            indent = { char = "|" },
+            min = 100,
+            max = 600,
+            smart_indent_cap = true
+        }
 
         -- Foldtext, folds functions and sets of code.
         use { 'anuvyklack/pretty-fold.nvim',
@@ -845,12 +830,12 @@ lsp.set_preferences({ sign_icons = {} })
 require('nvim-tree').setup {}
 
 -- Indent Blankline Config --
-require('indent_blankline').setup {
-    show_end_of_line = true,
-    space_char_blankline = " ",
-    show_current_context = true,
-    show_current_context_start = true,
-}
+-- require('indent_blankline').setup {
+--     show_end_of_line = true,
+--     space_char_blankline = " ",
+--     show_current_context = true,
+--     show_current_context_start = true,
+-- }
 
 -- Lualine Config --
 require('lualine').setup({
@@ -911,9 +896,19 @@ use {
     end
 }
 
--- Debugger tool that has breakpoints and state inspections DAP (Debug Adapter Protocol)
-use { 'mfussenegger/nvim-dap' }
 
+-- Show's that I'm working in Neovim on Discord
+use { 'andweeb/presence.nvim' }
+
+-- Omnisharp-roslyn
+local pid = vim.fn.getpid()
+local omnisharp_bin = "/usr/local/bin/omnisharp-roslyn/OmniSharp"
+-- local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+require('lspconfig').omnisharp.setup {
+    cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
+    -- capabilities = capabilities
+    -- Additional configurations can be added here
+}
 
 
 -----------------------REMAPS---------------------------------------------------
