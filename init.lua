@@ -353,14 +353,6 @@ notify("No output of command, exit code: " .. code, "warn")
         -- Adds indentation guides to all lines
         -- Includes use{} and setup{}
         use { 'lukas-reineke/indent-blankline.nvim' }
-        require "ibl".update { enabled = false }
-        require("ibl").setup {
-            debounce = 100,
-            indent = { char = "|" },
-            min = 100,
-            max = 600,
-            smart_indent_cap = true
-        }
 
         -- Foldtext, folds functions and sets of code.
         use { 'anuvyklack/pretty-fold.nvim',

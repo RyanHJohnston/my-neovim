@@ -166,16 +166,6 @@ _G.packer_plugins = {
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
     url = "https://github.com/lukas-reineke/indent-blankline.nvim"
   },
-  ["iron.nvim"] = {
-    loaded = true,
-    path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/iron.nvim",
-    url = "https://github.com/Vigemus/iron.nvim"
-  },
-  ["jupytext.vim"] = {
-    loaded = true,
-    path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/jupytext.vim",
-    url = "https://github.com/goerz/jupytext.vim"
-  },
   ["kanagawa.nvim"] = {
     loaded = true,
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/kanagawa.nvim",
@@ -196,11 +186,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/lualine.nvim",
     url = "https://github.com/nvim-lualine/lualine.nvim"
-  },
-  ["magma-nvim"] = {
-    loaded = true,
-    path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/magma-nvim",
-    url = "https://github.com/dccsillag/magma-nvim"
   },
   ["mapx.nvim"] = {
     loaded = true,
@@ -277,11 +262,6 @@ _G.packer_plugins = {
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
-  ["nvim-mysql"] = {
-    loaded = true,
-    path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/nvim-mysql",
-    url = "https://github.com/jobo3208/nvim-mysql"
-  },
   ["nvim-navbuddy"] = {
     loaded = true,
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/nvim-navbuddy",
@@ -348,11 +328,6 @@ _G.packer_plugins = {
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/sobrio",
     url = "https://github.com/elvessousa/sobrio"
   },
-  ["sqls.nvim"] = {
-    loaded = true,
-    path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/sqls.nvim",
-    url = "https://github.com/nanotee/sqls.nvim"
-  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/telescope.nvim",
@@ -375,7 +350,7 @@ _G.packer_plugins = {
     url = "https://github.com/folke/tokyonight.nvim"
   },
   ["trouble.nvim"] = {
-    config = { "\27LJ\2\n�\5\0\0\6\0\26\0\0316\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\3\0005\3\3\0005\4\4\0005\5\5\0=\5\6\0045\5\a\0=\5\b\0045\5\t\0=\5\n\0045\5\v\0=\5\f\0045\5\r\0=\5\14\0045\5\15\0=\5\16\0045\5\17\0=\5\18\0045\5\19\0=\5\20\4=\4\21\0035\4\22\0=\4\23\0035\4\24\0=\4\25\3>\3\1\2B\0\2\1K\0\1\0\nsigns\1\0\5\fwarning\b\nother\b﫠\16information\b\thint\b\nerror\b\14auto_jump\1\2\0\0\20lsp_definitions\16action_keys\16toggle_fold\1\3\0\0\azA\aza\15open_folds\1\3\0\0\azR\azr\16close_folds\1\3\0\0\azM\azm\15jump_close\1\2\0\0\6o\ropen_tab\1\2\0\0\n<c-t>\16open_vsplit\1\2\0\0\n<c-v>\15open_split\1\2\0\0\n<c-x>\tjump\1\3\0\0\t<cr>\n<tab>\1\0\t\frefresh\6r\tnext\6j\rprevious\6k\vcancel\n<esc>\fpreview\6p\nhover\6K\19toggle_preview\6P\16toggle_mode\6m\nclose\6q\1\0\15\14auto_open\1\17indent_lines\2\16fold_closed\b\fpadding\2\ngroup\2\tmode\26workspace_diagnostics\14fold_open\b\nwidth\0032\vheight\3\n\rposition\vbottom\25use_diagnostic_signs\1\nicons\2\14auto_fold\1\17auto_preview\2\15auto_close\1\nsetup\ftrouble\frequire\0" },
+    config = { "\27LJ\2\n�\5\0\0\6\0\26\0\0316\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\3\0005\3\3\0005\4\4\0005\5\5\0=\5\6\0045\5\a\0=\5\b\0045\5\t\0=\5\n\0045\5\v\0=\5\f\0045\5\r\0=\5\14\0045\5\15\0=\5\16\0045\5\17\0=\5\18\0045\5\19\0=\5\20\4=\4\21\0035\4\22\0=\4\23\0035\4\24\0=\4\25\3>\3\1\2B\0\2\1K\0\1\0\nsigns\1\0\5\thint\b\fwarning\b\nother\b﫠\16information\b\nerror\b\14auto_jump\1\2\0\0\20lsp_definitions\16action_keys\16toggle_fold\1\3\0\0\azA\aza\15open_folds\1\3\0\0\azR\azr\16close_folds\1\3\0\0\azM\azm\15jump_close\1\2\0\0\6o\ropen_tab\1\2\0\0\n<c-t>\16open_vsplit\1\2\0\0\n<c-v>\15open_split\1\2\0\0\n<c-x>\tjump\1\3\0\0\t<cr>\n<tab>\1\0\t\frefresh\6r\tnext\6j\rprevious\6k\vcancel\n<esc>\fpreview\6p\nhover\6K\19toggle_preview\6P\16toggle_mode\6m\nclose\6q\1\0\15\17auto_preview\2\15auto_close\1\14auto_open\1\17indent_lines\2\fpadding\2\nicons\2\tmode\26workspace_diagnostics\16fold_closed\b\14fold_open\b\nwidth\0032\vheight\3\n\rposition\vbottom\25use_diagnostic_signs\1\ngroup\2\14auto_fold\1\nsetup\ftrouble\frequire\0" },
     loaded = true,
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/trouble.nvim",
     url = "https://github.com/folke/trouble.nvim"
@@ -415,11 +390,6 @@ _G.packer_plugins = {
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/vim-irblack",
     url = "https://github.com/wesgibbs/vim-irblack"
   },
-  ["vim-textobj-user"] = {
-    loaded = true,
-    path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/vim-textobj-user",
-    url = "https://github.com/kana/vim-textobj-user"
-  },
   vimtex = {
     loaded = true,
     path = "/home/ryanhjohnston/.local/share/nvim/site/pack/packer/start/vimtex",
@@ -439,30 +409,30 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: which-key.nvim
+time([[Config for which-key.nvim]], true)
+try_loadstring("\27LJ\2\nt\0\0\3\0\a\0\0156\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0)\1,\1=\1\3\0006\0\4\0'\2\5\0B\0\2\0029\0\6\0004\2\0\0B\0\2\1K\0\1\0\nsetup\14which-key\frequire\15timeoutlen\ftimeout\6o\bvim\0", "config", "which-key.nvim")
+time([[Config for which-key.nvim]], false)
 -- Config for: trouble.nvim
 time([[Config for trouble.nvim]], true)
-try_loadstring("\27LJ\2\n�\5\0\0\6\0\26\0\0316\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\3\0005\3\3\0005\4\4\0005\5\5\0=\5\6\0045\5\a\0=\5\b\0045\5\t\0=\5\n\0045\5\v\0=\5\f\0045\5\r\0=\5\14\0045\5\15\0=\5\16\0045\5\17\0=\5\18\0045\5\19\0=\5\20\4=\4\21\0035\4\22\0=\4\23\0035\4\24\0=\4\25\3>\3\1\2B\0\2\1K\0\1\0\nsigns\1\0\5\fwarning\b\nother\b﫠\16information\b\thint\b\nerror\b\14auto_jump\1\2\0\0\20lsp_definitions\16action_keys\16toggle_fold\1\3\0\0\azA\aza\15open_folds\1\3\0\0\azR\azr\16close_folds\1\3\0\0\azM\azm\15jump_close\1\2\0\0\6o\ropen_tab\1\2\0\0\n<c-t>\16open_vsplit\1\2\0\0\n<c-v>\15open_split\1\2\0\0\n<c-x>\tjump\1\3\0\0\t<cr>\n<tab>\1\0\t\frefresh\6r\tnext\6j\rprevious\6k\vcancel\n<esc>\fpreview\6p\nhover\6K\19toggle_preview\6P\16toggle_mode\6m\nclose\6q\1\0\15\14auto_open\1\17indent_lines\2\16fold_closed\b\fpadding\2\ngroup\2\tmode\26workspace_diagnostics\14fold_open\b\nwidth\0032\vheight\3\n\rposition\vbottom\25use_diagnostic_signs\1\nicons\2\14auto_fold\1\17auto_preview\2\15auto_close\1\nsetup\ftrouble\frequire\0", "config", "trouble.nvim")
+try_loadstring("\27LJ\2\n�\5\0\0\6\0\26\0\0316\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\3\0005\3\3\0005\4\4\0005\5\5\0=\5\6\0045\5\a\0=\5\b\0045\5\t\0=\5\n\0045\5\v\0=\5\f\0045\5\r\0=\5\14\0045\5\15\0=\5\16\0045\5\17\0=\5\18\0045\5\19\0=\5\20\4=\4\21\0035\4\22\0=\4\23\0035\4\24\0=\4\25\3>\3\1\2B\0\2\1K\0\1\0\nsigns\1\0\5\thint\b\fwarning\b\nother\b﫠\16information\b\nerror\b\14auto_jump\1\2\0\0\20lsp_definitions\16action_keys\16toggle_fold\1\3\0\0\azA\aza\15open_folds\1\3\0\0\azR\azr\16close_folds\1\3\0\0\azM\azm\15jump_close\1\2\0\0\6o\ropen_tab\1\2\0\0\n<c-t>\16open_vsplit\1\2\0\0\n<c-v>\15open_split\1\2\0\0\n<c-x>\tjump\1\3\0\0\t<cr>\n<tab>\1\0\t\frefresh\6r\tnext\6j\rprevious\6k\vcancel\n<esc>\fpreview\6p\nhover\6K\19toggle_preview\6P\16toggle_mode\6m\nclose\6q\1\0\15\17auto_preview\2\15auto_close\1\14auto_open\1\17indent_lines\2\fpadding\2\nicons\2\tmode\26workspace_diagnostics\16fold_closed\b\14fold_open\b\nwidth\0032\vheight\3\n\rposition\vbottom\25use_diagnostic_signs\1\ngroup\2\14auto_fold\1\nsetup\ftrouble\frequire\0", "config", "trouble.nvim")
 time([[Config for trouble.nvim]], false)
 -- Config for: toggleterm.nvim
 time([[Config for toggleterm.nvim]], true)
 try_loadstring("\27LJ\2\n<\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\15toggleterm\frequire\0", "config", "toggleterm.nvim")
 time([[Config for toggleterm.nvim]], false)
--- Config for: pretty-fold.nvim
-time([[Config for pretty-fold.nvim]], true)
-try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\16pretty-fold\frequire\0", "config", "pretty-fold.nvim")
-time([[Config for pretty-fold.nvim]], false)
 -- Config for: distant.nvim
 time([[Config for distant.nvim]], true)
 try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\2\18\2\0\0009\0\2\0B\0\2\1K\0\1\0\nsetup\fdistant\frequire\0", "config", "distant.nvim")
 time([[Config for distant.nvim]], false)
+-- Config for: pretty-fold.nvim
+time([[Config for pretty-fold.nvim]], true)
+try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\16pretty-fold\frequire\0", "config", "pretty-fold.nvim")
+time([[Config for pretty-fold.nvim]], false)
 -- Config for: lsp_lines.nvim
 time([[Config for lsp_lines.nvim]], true)
 try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14lsp_lines\frequire\0", "config", "lsp_lines.nvim")
 time([[Config for lsp_lines.nvim]], false)
--- Config for: which-key.nvim
-time([[Config for which-key.nvim]], true)
-try_loadstring("\27LJ\2\nt\0\0\3\0\a\0\0156\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0)\1,\1=\1\3\0006\0\4\0'\2\5\0B\0\2\0029\0\6\0004\2\0\0B\0\2\1K\0\1\0\nsetup\14which-key\frequire\15timeoutlen\ftimeout\6o\bvim\0", "config", "which-key.nvim")
-time([[Config for which-key.nvim]], false)
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then
