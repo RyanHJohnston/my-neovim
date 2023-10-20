@@ -458,507 +458,505 @@ if has('termguicolors')
         use { 'jacoborus/tender.vim' }
         use { 'kaiuri/nvim-juliana' }
 
-    -- Telescope (File Finder) --
-    use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.4',
-        -- or                            , branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' } }
+        -- Telescope (File Finder) --
+        use {
+            'nvim-telescope/telescope.nvim', tag = '0.1.4',
+            -- or                            , branch = '0.1.x',
+            requires = { { 'nvim-lua/plenary.nvim' } }
+        }
+
+        -- ToggleTerm (Integrated Terminal)
+        use { "akinsho/toggleterm.nvim", tag = '*', config = function()
+            require("toggleterm").setup({
+                -- toggleterm config goes here
+            })
+        end }
+
+        -- Nvim-Tree (File Manager) --
+        use {
+            'nvim-tree/nvim-tree.lua',
+            requires = {
+                'nvim-tree/nvim-web-devicons', -- optional, for file icons
+            },
+            tag = 'nightly' -- optional, updated every week. (see issue #1193)
+        }
+
+        -- NeoTree (Better File Manager) --
+        use {
+            'nvim-neo-tree/neo-tree.nvim',
+            branch = 'v2.x',
+            requires = {
+                'nvim-lua/plenary.nvim',
+                'nvim-tree/nvim-web-devicons', -- not required, but recommended
+                'MunifTanjim/nui.nvim',
+            }
+        }
+
+        use {'nvim-tree/nvim-web-devicons'}
+        require'nvim-web-devicons'.setup {
+            -- your personnal icons can go here (to override)
+            -- you can specify color or cterm_color instead of specifying both of them
+            -- DevIcon will be appended to `name`
+            override = {
+                zsh = {
+                    icon = "",
+                    color = "#428850",
+                    cterm_color = "65",
+                    name = "Zsh"
+                }
+            };
+            -- globally enable different highlight colors per icon (default to true)
+            -- if set to false all icons will have the default icon's color
+            color_icons = true;
+            -- globally enable default icons (default to false)
+            -- will get overriden by `get_icons` option
+            default = true;
+            -- globally enable "strict" selection of icons - icon will be looked up in
+            -- different tables, first by filename, and if not found by extension; this
+            -- prevents cases when file doesn't have any extension but still gets some icon
+            -- because its name happened to match some extension (default to false)
+            strict = true;
+            -- same as `override` but specifically for overrides by filename
+            -- takes effect when `strict` is true
+            override_by_filename = {
+                [".gitignore"] = {
+                    icon = "",
+                    color = "#f1502f",
+                    name = "Gitignore"
+                }
+            };
+            -- same as `override` but specifically for overrides by extension
+            -- takes effect when `strict` is true
+            override_by_extension = {
+                ["log"] = {
+                    icon = "",
+                    color = "#81e043",
+                    name = "Log"
+                }
+            };
+        }
+
+        -- Baerbar.nvim (Tabs) --
+        -- A tabs plugin
+        -- This is dependent on 'nvim-tree/nvim-web-devicons'
+        use { 'romgrk/barbar.nvim', wants = 'nvim-tree/nvim-web-devicons',
+        vim.api.nvim_set_keymap('n','<C-n>','<Cmd>BufferPin<Enter>',
+        { noremap = true, silent }),
+        vim.api.nvim_set_keymap('n','<C-d>','<Cmd>BufferDelete<Enter>',
+        { noremap = true, silent }),
+        vim.api.nvim_set_keymap('n','<A->>','<Cmd>BufferMoveNext<Enter>',
+        { noremap = true, silent }),
+        require'barbar'.setup {
+            -- WARN: do not copy everything below into your config!
+            --       It is just an example of what configuration options there are.
+            --       The defaults are suitable for most people.
+
+            -- Enable/disable animations
+            animation = true,
+
+            -- Enable/disable auto-hiding the tab bar when there is a single buffer
+            auto_hide = false,
+
+            -- Enable/disable current/total tabpages indicator (top right corner)
+            tabpages = true,
+
+            -- Enables/disable clickable tabs
+            --  - left-click: go to buffer
+            --  - middle-click: delete buffer
+            clickable = true,
+
+            -- A buffer to this direction will be focused (if it exists) when closing the current buffer.
+            -- Valid options are 'left' (the default), 'previous', and 'right'
+            focus_on_close = 'left',
+
+            -- Disable highlighting alternate buffers
+            highlight_alternate = false,
+
+            -- Disable highlighting file icons in inactive buffers
+            highlight_inactive_file_icons = false,
+
+            -- Enable highlighting visible buffers
+            highlight_visible = true,
+
+            icons = {
+                -- Configure the base icons on the bufferline.
+                -- Valid options to display the buffer index and -number are `true`, 'superscript' and 'subscript'
+                buffer_index = true,
+                buffer_number = true,
+                button = '',
+                -- Enables / disables diagnostic symbols
+                diagnostics = {
+                    [vim.diagnostic.severity.ERROR] = {enabled = true, icon = 'ﬀ'},
+                    [vim.diagnostic.severity.WARN] = {enabled = true},
+                    [vim.diagnostic.severity.INFO] = {enabled = true},
+                    [vim.diagnostic.severity.HINT] = {enabled = true},
+                },
+                gitsigns = {
+                    added = {enabled = true, icon = '+'},
+                    changed = {enabled = true, icon = '~'},
+                    deleted = {enabled = true, icon = '-'},
+                },
+                filetype = {
+                    -- Sets the icon's highlight group.
+                    -- If false, will use nvim-web-devicons colors
+                    custom_colors = true,
+
+                    -- Requires `nvim-web-devicons` if `true`
+                    enabled = true,
+                },
+                separator = {left = '▎', right = ''},
+
+                -- Configure the icons on the bufferline when modified or pinned.
+                -- Supports all the base icon options.
+                modified = {button = '●'},
+                pinned = {button = '', filename = true},
+
+                -- Use a preconfigured buffer appearance— can be 'default', 'powerline', or 'slanted'
+                preset = 'default',
+
+                -- Configure the icons on the bufferline based on the visibility of a buffer.
+                -- Supports all the base icon options, plus `modified` and `pinned`.
+                alternate = {filetype = {enabled = false}},
+                current = {buffer_index = true},
+                inactive = {button = '×'},
+                visible = {modified = {buffer_number = false}},
+            },
+
+            -- If true, new buffers will be inserted at the start/end of the list.
+            -- Default is to insert after current buffer.
+            insert_at_end = false,
+            insert_at_start = false,
+
+            -- Sets the maximum padding width with which to surround each tab
+            maximum_padding = 1,
+
+            -- Sets the minimum padding width with which to surround each tab
+            minimum_padding = 1,
+
+            -- Sets the maximum buffer name length.
+            maximum_length = 30,
+
+            -- Sets the minimum buffer name length.
+            minimum_length = 0,
+
+            -- If set, the letters for each buffer in buffer-pick mode will be
+            -- assigned based on their name. Otherwise or in case all letters are
+            -- already assigned, the behavior is to assign letters in order of
+            -- usability (see order below)
+            semantic_letters = true,
+
+            -- Set the filetypes which barbar will offset itself for
+            sidebar_filetypes = {
+                -- Use the default values: {event = 'BufWinLeave', text = nil}
+                NvimTree = true,
+                -- Or, specify the text used for the offset:
+                undotree = {text = 'undotree'},
+                -- Or, specify the event which the sidebar executes when leaving:
+                ['neo-tree'] = {event = 'BufWipeout'},
+                -- Or, specify both
+                Outline = {event = 'BufWinLeave', text = 'symbols-outline'},
+            },
+
+            -- New buffer letters are assigned in this order. This order is
+            -- optimal for the qwerty keyboard layout but might need adjustment
+            -- for other layouts.
+            letters = 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP',
+
+            -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
+            -- where X is the buffer number. But only a static string is accepted here.
+            no_name_title = nil,
+        }
     }
+    -- Mapx.nvim (Easier key mappings) --
+    -- This makes the key mappings for commands much easier
+    -- It's supposed to mimic the .vim config
+    use "b0o/mapx.nvim"
 
-    -- ToggleTerm (Integrated Terminal)
-    use { "akinsho/toggleterm.nvim", tag = '*', config = function()
-        require("toggleterm").setup({
-            -- toggleterm config goes here
-        })
-    end }
+    -- Treesitter --
+    use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+    use('nvim-treesitter/playground')
 
-    -- Nvim-Tree (File Manager) --
+    -- LSP Zero (Language Server Protocol) --
+    -- Very important for autocompletion
     use {
-        'nvim-tree/nvim-tree.lua',
+        'VonHeikemen/lsp-zero.nvim',
         requires = {
-            'nvim-tree/nvim-web-devicons', -- optional, for file icons
-        },
-        tag = 'nightly' -- optional, updated every week. (see issue #1193)
-    }
+            -- LSP Support
+            { 'neovim/nvim-lspconfig' },
+            { 'williamboman/mason.nvim' },
+            { 'williamboman/mason-lspconfig.nvim' },
 
-    -- NeoTree (Better File Manager) --
-    use {
-        'nvim-neo-tree/neo-tree.nvim',
-        branch = 'v2.x',
-        requires = {
-            'nvim-lua/plenary.nvim',
-            'nvim-tree/nvim-web-devicons', -- not required, but recommended
-            'MunifTanjim/nui.nvim',
+            -- Autocompletion
+            { 'hrsh7th/nvim-cmp' },
+            { 'hrsh7th/cmp-buffer' },
+            { 'hrsh7th/cmp-path' },
+            { 'saadparwaiz1/cmp_luasnip' },
+            { 'hrsh7th/cmp-nvim-lsp' },
+            { 'hrsh7th/cmp-nvim-lua' },
+
+            -- Snippets
+            { 'L3MON4D3/LuaSnip' },
+            { 'rafamadriz/friendly-snippets' },
         }
     }
 
-    use {'nvim-tree/nvim-web-devicons'}
-    require'nvim-web-devicons'.setup {
-        -- your personnal icons can go here (to override)
-        -- you can specify color or cterm_color instead of specifying both of them
-        -- DevIcon will be appended to `name`
-        override = {
-            zsh = {
-                icon = "",
-                color = "#428850",
-                cterm_color = "65",
-                name = "Zsh"
-            }
-        };
-        -- globally enable different highlight colors per icon (default to true)
-        -- if set to false all icons will have the default icon's color
-        color_icons = true;
-        -- globally enable default icons (default to false)
-        -- will get overriden by `get_icons` option
-        default = true;
-        -- globally enable "strict" selection of icons - icon will be looked up in
-        -- different tables, first by filename, and if not found by extension; this
-        -- prevents cases when file doesn't have any extension but still gets some icon
-        -- because its name happened to match some extension (default to false)
-        strict = true;
-        -- same as `override` but specifically for overrides by filename
-        -- takes effect when `strict` is true
-        override_by_filename = {
-            [".gitignore"] = {
-                icon = "",
-                color = "#f1502f",
-                name = "Gitignore"
-            }
-        };
-        -- same as `override` but specifically for overrides by extension
-        -- takes effect when `strict` is true
-        override_by_extension = {
-            ["log"] = {
-                icon = "",
-                color = "#81e043",
-                name = "Log"
-            }
-        };
-    }
-
-    -- Baerbar.nvim (Tabs) --
-    -- A tabs plugin
-    -- This is dependent on 'nvim-tree/nvim-web-devicons'
-    use { 'romgrk/barbar.nvim', wants = 'nvim-tree/nvim-web-devicons',
-    vim.api.nvim_set_keymap('n','<C-n>','<Cmd>BufferPin<Enter>',
-    { noremap = true, silent }),
-    vim.api.nvim_set_keymap('n','<C-d>','<Cmd>BufferDelete<Enter>',
-    { noremap = true, silent }),
-    vim.api.nvim_set_keymap('n','<A->>','<Cmd>BufferMoveNext<Enter>',
-    { noremap = true, silent }),
-    require'barbar'.setup {
-        -- WARN: do not copy everything below into your config!
-        --       It is just an example of what configuration options there are.
-        --       The defaults are suitable for most people.
-
-        -- Enable/disable animations
-        animation = true,
-
-        -- Enable/disable auto-hiding the tab bar when there is a single buffer
-        auto_hide = false,
-
-        -- Enable/disable current/total tabpages indicator (top right corner)
-        tabpages = true,
-
-        -- Enables/disable clickable tabs
-        --  - left-click: go to buffer
-        --  - middle-click: delete buffer
-        clickable = true,
-
-        -- A buffer to this direction will be focused (if it exists) when closing the current buffer.
-        -- Valid options are 'left' (the default), 'previous', and 'right'
-        focus_on_close = 'left',
-
-        -- Disable highlighting alternate buffers
-        highlight_alternate = false,
-
-        -- Disable highlighting file icons in inactive buffers
-        highlight_inactive_file_icons = false,
-
-        -- Enable highlighting visible buffers
-        highlight_visible = true,
-
-        icons = {
-            -- Configure the base icons on the bufferline.
-            -- Valid options to display the buffer index and -number are `true`, 'superscript' and 'subscript'
-            buffer_index = true,
-            buffer_number = true,
-            button = '',
-            -- Enables / disables diagnostic symbols
-            diagnostics = {
-                [vim.diagnostic.severity.ERROR] = {enabled = true, icon = 'ﬀ'},
-                [vim.diagnostic.severity.WARN] = {enabled = true},
-                [vim.diagnostic.severity.INFO] = {enabled = true},
-                [vim.diagnostic.severity.HINT] = {enabled = true},
-            },
-            gitsigns = {
-                added = {enabled = true, icon = '+'},
-                changed = {enabled = true, icon = '~'},
-                deleted = {enabled = true, icon = '-'},
-            },
-            filetype = {
-                -- Sets the icon's highlight group.
-                -- If false, will use nvim-web-devicons colors
-                custom_colors = true,
-
-                -- Requires `nvim-web-devicons` if `true`
-                enabled = true,
-            },
-            separator = {left = '▎', right = ''},
-
-            -- Configure the icons on the bufferline when modified or pinned.
-            -- Supports all the base icon options.
-            modified = {button = '●'},
-            pinned = {button = '', filename = true},
-
-            -- Use a preconfigured buffer appearance— can be 'default', 'powerline', or 'slanted'
-            preset = 'default',
-
-            -- Configure the icons on the bufferline based on the visibility of a buffer.
-            -- Supports all the base icon options, plus `modified` and `pinned`.
-            alternate = {filetype = {enabled = false}},
-            current = {buffer_index = true},
-            inactive = {button = '×'},
-            visible = {modified = {buffer_number = false}},
-        },
-
-        -- If true, new buffers will be inserted at the start/end of the list.
-        -- Default is to insert after current buffer.
-        insert_at_end = false,
-        insert_at_start = false,
-
-        -- Sets the maximum padding width with which to surround each tab
-        maximum_padding = 1,
-
-        -- Sets the minimum padding width with which to surround each tab
-        minimum_padding = 1,
-
-        -- Sets the maximum buffer name length.
-        maximum_length = 30,
-
-        -- Sets the minimum buffer name length.
-        minimum_length = 0,
-
-        -- If set, the letters for each buffer in buffer-pick mode will be
-        -- assigned based on their name. Otherwise or in case all letters are
-        -- already assigned, the behavior is to assign letters in order of
-        -- usability (see order below)
-        semantic_letters = true,
-
-        -- Set the filetypes which barbar will offset itself for
-        sidebar_filetypes = {
-            -- Use the default values: {event = 'BufWinLeave', text = nil}
-            NvimTree = true,
-            -- Or, specify the text used for the offset:
-            undotree = {text = 'undotree'},
-            -- Or, specify the event which the sidebar executes when leaving:
-            ['neo-tree'] = {event = 'BufWipeout'},
-            -- Or, specify both
-            Outline = {event = 'BufWinLeave', text = 'symbols-outline'},
-        },
-
-        -- New buffer letters are assigned in this order. This order is
-        -- optimal for the qwerty keyboard layout but might need adjustment
-        -- for other layouts.
-        letters = 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP',
-
-        -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
-        -- where X is the buffer number. But only a static string is accepted here.
-        no_name_title = nil,
-    }
-}
--- Mapx.nvim (Easier key mappings) --
--- This makes the key mappings for commands much easier
--- It's supposed to mimic the .vim config
-use "b0o/mapx.nvim"
-
--- Treesitter --
-use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
-use('nvim-treesitter/playground')
-
--- LSP Zero (Language Server Protocol) --
--- Very important for autocompletion
-use {
-    'VonHeikemen/lsp-zero.nvim',
-    requires = {
-        -- LSP Support
-        { 'neovim/nvim-lspconfig' },
-        { 'williamboman/mason.nvim' },
-        { 'williamboman/mason-lspconfig.nvim' },
-
-        -- Autocompletion
-        { 'hrsh7th/nvim-cmp' },
-        { 'hrsh7th/cmp-buffer' },
-        { 'hrsh7th/cmp-path' },
-        { 'saadparwaiz1/cmp_luasnip' },
-        { 'hrsh7th/cmp-nvim-lsp' },
-        { 'hrsh7th/cmp-nvim-lua' },
-
-        -- Snippets
-        { 'L3MON4D3/LuaSnip' },
-        { 'rafamadriz/friendly-snippets' },
-    }
-}
-
--- Improved jdtls lsp Java nvim experience
-use 'mfussenegger/nvim-jdtls'
-local opts = {
-    cmd = {},
-    settings = {
-        java = {
-            signatureHelp = { enabled = true },
-            completion = {
-                favoriteStaticMembers = {},
-                filteredTypes = {
-                    -- "com.sun.*",
-                    -- "io.micrometer.shaded.*",
-                    -- "java.awt.*",
-                    -- "jdk.*",
-                    -- "sun.*",
-                },
-            },
-            sources = {
-                organizeImports = {
-                    starThreshold = 9999,
-                    staticStarThreshold = 9999,
-                },
-            },
-            codeGeneration = {
-                toString = {
-                    template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
-                },
-                useBlocks = true,
-            },
-            configuration = {
-                runtimes = {
-                    {
-                        name = "JavaSE-1.8",
-                        path = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home",
-                        default = true,
+    -- Improved jdtls lsp Java nvim experience
+    use 'mfussenegger/nvim-jdtls'
+    local opts = {
+        cmd = {},
+        settings = {
+            java = {
+                signatureHelp = { enabled = true },
+                completion = {
+                    favoriteStaticMembers = {},
+                    filteredTypes = {
+                        -- "com.sun.*",
+                        -- "io.micrometer.shaded.*",
+                        -- "java.awt.*",
+                        -- "jdk.*",
+                        -- "sun.*",
                     },
-                    {
-                        name = "JavaSE-17",
-                        path = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home",
+                },
+                sources = {
+                    organizeImports = {
+                        starThreshold = 9999,
+                        staticStarThreshold = 9999,
                     },
-                    {
-                        name = "JavaSE-19",
-                        path = "/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home",
+                },
+                codeGeneration = {
+                    toString = {
+                        template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
+                    },
+                    useBlocks = true,
+                },
+                configuration = {
+                    runtimes = {
+                        {
+                            name = "JavaSE-1.8",
+                            path = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home",
+                            default = true,
+                        },
+                        {
+                            name = "JavaSE-17",
+                            path = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home",
+                        },
+                        {
+                            name = "JavaSE-19",
+                            path = "/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home",
+                        },
                     },
                 },
             },
         },
-    },
-}
-
-local function setup()
-    local pkg_status, jdtls = pcall(require,"jdtls")
-    if not pkg_status then
-        vim.notify("unable to load nvim-jdtls", "error")
-        return {}
-    end
-
-    -- local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
-    local jdtls_bin = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
-
-    local root_markers = { ".gradle", "gradlew", ".git" }
-    local root_dir = jdtls.setup.find_root(root_markers)
-    local home = os.getenv("HOME")
-    local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
-    local workspace_dir = home .. "/.cache/jdtls/workspace/" .. project_name
-
-    opts.cmd = {
-        jdtls_bin,
-        "-data",
-        workspace_dir,
     }
 
-
-    local on_attach = function(client, bufnr)
-        jdtls.setup.add_commands() -- important to ensure you can update configs when build is updated
-        -- if you setup DAP according to https://github.com/mfussenegger/nvim-jdtls#nvim-dap-configuration you can uncomment below
-        -- jdtls.setup_dap({ hotcodereplace = "auto" })
-        -- jdtls.dap.setup_dap_main_class_configs()
-
-        -- you may want to also run your generic on_attach() function used by your LSP config
-    end
-
-    opts.on_attach = on_attach
-    opts.capabilities = vim.lsp.protocol.make_client_capabilities()
-
-    return opts
-end
-
-require 'nvim-treesitter.configs'.setup {
-    -- This is where you will get your much needed Autocompletion
-    -- So far, this is the only config that has working Java autocompletion
-    -- A list of parser names, or "all"
-    ensure_installed = { "javascript", "typescript", "java", "c", "lua",
-    "rust", "python", "bash" },
-
-    -- Install parsers synchronously (only applied to `ensure_installed`)
-    sync_install = false,
-
-    -- Automatically install missing parsers when entering buffer
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = true,
-
-    highlight = {
-        -- `false` will disable the whole extension
-        enable = true,
-
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
-    },
-}
-
--- Lsp Zero config --
--- LIST OF LANGUAGE SERVERS (LSPList)
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-lsp.setup()
-local cmp = require('cmp')
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-lsp.set_preferences({ sign_icons = {} })
-
-require('nvim-tree').setup {}
-
--- Indent Blankline Config --
--- require('indent_blankline').setup {
-    --     show_end_of_line = true,
-    --     space_char_blankline = " ",
-    --     show_current_context = true,
-    --     show_current_context_start = true,
-    -- }
-
-    -- Lualine Config --
-    require('lualine').setup({
-        options = {
-            icons_enabled = true,
-            theme = 'auto',
-            component_separators = { left = '', right = '' },
-            section_separators = { left = '', right = '' },
-            disabled_filetypes = {
-                statusline = {},
-                winbar = {},
-            },
-            ignore_focus = {},
-            always_divide_middle = true,
-            globalstatus = false,
-            refresh = {
-                statusline = 1000,
-                tabline = 1000,
-                winbar = 1000,
-            }
-        },
-        sections = {
-            lualine_a = { 'mode' },
-            lualine_b = { 'branch', 'diff', 'diagnostics' },
-            lualine_c = { 'filename' },
-            lualine_x = { 'encoding', 'fileformat', 'filetype' },
-            lualine_y = { 'progress' },
-            lualine_z = { 'location' }
-        },
-        inactive_sections = {
-            lualine_a = {},
-            lualine_b = {},
-            lualine_c = { 'filename' },
-            lualine_x = { 'location' },
-            lualine_y = {},
-            lualine_z = {}
-        },
-        tabline = {},
-        winbar = {},
-        inactive_winbar = {},
-        extensions = { 'quickfix', 'toggleterm', 'man' }
-    })
-
-    -- Lualine config
-    -- The bar at the bottom of the editor
-    require('lualine').setup {
-        options = {
-            theme = 'vscode',
-        }
-    }
-
-    -- Edit files remotely from your local machine (distant.nvim)
-    use {
-        'chipsenkbeil/distant.nvim',
-        branch = 'v0.3',
-        config = function()
-            require('distant'):setup()
+    local function setup()
+        local pkg_status, jdtls = pcall(require,"jdtls")
+        if not pkg_status then
+            vim.notify("unable to load nvim-jdtls", "error")
+            return {}
         end
+
+        -- local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
+        local jdtls_bin = vim.fn.stdpath("data") .. "/mason/bin/jdtls"
+
+        local root_markers = { ".gradle", "gradlew", ".git" }
+        local root_dir = jdtls.setup.find_root(root_markers)
+        local home = os.getenv("HOME")
+        local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
+        local workspace_dir = home .. "/.cache/jdtls/workspace/" .. project_name
+
+        opts.cmd = {
+            jdtls_bin,
+            "-data",
+            workspace_dir,
+        }
+
+
+        local on_attach = function(client, bufnr)
+            jdtls.setup.add_commands() -- important to ensure you can update configs when build is updated
+            -- if you setup DAP according to https://github.com/mfussenegger/nvim-jdtls#nvim-dap-configuration you can uncomment below
+            -- jdtls.setup_dap({ hotcodereplace = "auto" })
+            -- jdtls.dap.setup_dap_main_class_configs()
+
+            -- you may want to also run your generic on_attach() function used by your LSP config
+        end
+
+        opts.on_attach = on_attach
+        opts.capabilities = vim.lsp.protocol.make_client_capabilities()
+
+        return opts
+    end
+
+    require 'nvim-treesitter.configs'.setup {
+        -- This is where you will get your much needed Autocompletion
+        -- So far, this is the only config that has working Java autocompletion
+        -- A list of parser names, or "all"
+        ensure_installed = { "javascript", "typescript", "java", "c", "lua",
+        "rust", "python", "bash" },
+
+        -- Install parsers synchronously (only applied to `ensure_installed`)
+        sync_install = false,
+
+        -- Automatically install missing parsers when entering buffer
+        -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+        auto_install = true,
+
+        highlight = {
+            -- `false` will disable the whole extension
+            enable = true,
+
+            -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+            -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+            -- Using this option may slow down your editor, and you may see some duplicate highlights.
+            -- Instead of true it can also be a list of languages
+            additional_vim_regex_highlighting = false,
+        },
     }
 
+    -- Lsp Zero config --
+    -- LIST OF LANGUAGE SERVERS (LSPList)
+    local lsp = require('lsp-zero')
+    lsp.preset('recommended')
+    lsp.setup()
+    local cmp = require('cmp')
+    local cmp_select = { behavior = cmp.SelectBehavior.Select }
+    lsp.set_preferences({ sign_icons = {} })
 
-    -- Show's that I'm working in Neovim on Discord
-    use { 'andweeb/presence.nvim' }
+    require('nvim-tree').setup {}
 
-    -- Omnisharp-roslyn
-    local pid = vim.fn.getpid()
-    local omnisharp_bin = "/usr/local/bin/omnisharp-roslyn/OmniSharp"
-    -- local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-    require('lspconfig').omnisharp.setup {
-        cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
-        -- capabilities = capabilities
-        -- Additional configurations can be added here
-    }
+    -- Indent Blankline Config --
+    -- require('indent_blankline').setup {
+        --     show_end_of_line = true,
+        --     space_char_blankline = " ",
+        --     show_current_context = true,
+        --     show_current_context_start = true,
+        -- }
+
+        -- Lualine Config --
+        require('lualine').setup({
+            options = {
+                icons_enabled = true,
+                theme = 'auto',
+                component_separators = { left = '', right = '' },
+                section_separators = { left = '', right = '' },
+                disabled_filetypes = {
+                    statusline = {},
+                    winbar = {},
+                },
+                ignore_focus = {},
+                always_divide_middle = true,
+                globalstatus = false,
+                refresh = {
+                    statusline = 1000,
+                    tabline = 1000,
+                    winbar = 1000,
+                }
+            },
+            sections = {
+                lualine_a = { 'mode' },
+                lualine_b = { 'branch', 'diff', 'diagnostics' },
+                lualine_c = { 'filename' },
+                lualine_x = { 'encoding', 'fileformat', 'filetype' },
+                lualine_y = { 'progress' },
+                lualine_z = { 'location' }
+            },
+            inactive_sections = {
+                lualine_a = {},
+                lualine_b = {},
+                lualine_c = { 'filename' },
+                lualine_x = { 'location' },
+                lualine_y = {},
+                lualine_z = {}
+            },
+            tabline = {},
+            winbar = {},
+            inactive_winbar = {},
+            extensions = { 'quickfix', 'toggleterm', 'man' }
+        })
+
+        -- Lualine config
+        -- The bar at the bottom of the editor
+        require('lualine').setup {
+            options = {
+                theme = 'vscode',
+            }
+        }
+
+        -- Edit files remotely from your local machine (distant.nvim)
+        use {
+            'chipsenkbeil/distant.nvim',
+            branch = 'v0.3',
+            config = function()
+                require('distant'):setup()
+            end
+        }
 
 
-    -----------------------REMAPS---------------------------------------------------
-    local builtin = require('telescope.builtin')
-    vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-    vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
-    vim.keymap.set('n', '<leader>ps', function()
-        builtin.grep_string({ search = vim.fn.input("Grep > ") })
+        -- Show's that I'm working in Neovim on Discord
+        use { 'andweeb/presence.nvim' }
+
+        -- Omnisharp-roslyn
+        local pid = vim.fn.getpid()
+        local omnisharp_bin = "/usr/local/bin/omnisharp-roslyn/OmniSharp"
+        -- local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+        require('lspconfig').omnisharp.setup {
+            cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
+            -- capabilities = capabilities
+            -- Additional configurations can be added here
+        }
+
+
+        -----------------------REMAPS---------------------------------------------------
+        local builtin = require('telescope.builtin')
+        vim.keymap.set('n', '<C-p>', builtin.git_files, {})
+        vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
+        vim.keymap.set('n', '<leader>ps', function()
+            builtin.grep_string({ search = vim.fn.input("Grep > ") })
+        end)
+
+        -- ToggleTerm and NvimTreeToggle mappings
+        --  require'mapx'.setup{ global = true }
+
+        vim.api.nvim_set_keymap('n','f',':NeoTree<Enter>',{noremap=true,silent=true})
+        vim.api.nvim_set_keymap('n','ff',':NeoTreeClose<Enter>',{noremap=true,silent=true})
+        vim.api.nvim_set_keymap('n','T',':ToggleTerm direction=horizontal size=25<Enter>',{noremap=true,silent=true})
+        vim.api.nvim_set_keymap('n','TV',':ToggleTerm direction=vertical size=100<Enter>',{noremap=true,silent=true})
+        vim.api.nvim_set_keymap('n','TF',':ToggleTerm direction=float<Enter>',{noremap=true,silent=true})
+
+        -- Tabs mappings (BufferMove, BufferPrevious, etc)
+        vim.api.nvim_set_keymap('n','n',':BufferPrevious<Enter>',{noremap=true,silent=false})
+        vim.api.nvim_set_keymap('n','m',':BufferNext<Enter>',{noremap=true,silent=false})
+        vim.api.nvim_set_keymap('n','<Esc>n',':BufferMovePrevious<Enter>',{noremap=true,silent=false})
+        vim.api.nvim_set_keymap('n','<Esc>m',':BufferMoveNext<Enter>',{noremap=true,silent=false})
+        for i = 1, 9 do
+            vim.api.nvim_set_keymap('n',tostring(i),":BufferGoto " .. tostring(i) .. " <Enter>",
+            {noremap=true,silent=false})
+        end
+        
+        -- Auto-generate comments
+        vim.api.nvim_set_keymap('n','CC',':DogeGenerate<Enter>',{noremap=true,silent=true})
+
+        -- Telescope commands to make navigation easier
+        vim.api.nvim_set_keymap('n','rr',':Telescope find_files<Enter>',{noremap=true,silent=true})
+        vim.api.nvim_set_keymap('n','RR',':Telescope<Enter>',{noremap=true,silent=true})
+        -- Shows errors
+        vim.api.nvim_set_keymap('n','er',':TroubleToggle<Enter>',{noremap=true,silent=true})
+
+        -- Vimtex commands
+        vim.api.nvim_set_keymap('n','tk',':VimtexCompile<Enter>',{noremap=true,silent=true})
+        vim.api.nvim_set_keymap('n','te',':VimtexErrors<Enter>',{noremap=true,silent=true})
     end)
 
-    -- Script that comments out multiple lines
+    -- PHP Intelephense LSP config
+    vim.g.intelephense_enable = 1
+    vim.g.intelephense_executable = 'intelephense'
+    require('lspconfig').intelephense.setup{}
 
-    -- ToggleTerm and NvimTreeToggle mappings
-    --  require'mapx'.setup{ global = true }
+    ------------------------ PHP INTELEPHENSE CONFIG ---------------------------
+ 
+    -----------------------------------------------------------------------
 
-    nnoremap("f", ":Neotree <Enter>") -- changed to Neotree command
-    nnoremap("ff", ":NeoTreeClose <Enter>")
-    nnoremap("T", ":ToggleTerm direction=horizontal size=25 <Enter>")
-    nnoremap("TV", ":ToggleTerm direction=vertical size=100 <Enter>")
-    nnoremap("TF", ":ToggleTerm direction=float <Enter>")
-
-    -- Tabs mappings (BufferMove, BufferPrevious, etc)
-    vim.api.nvim_set_keymap('n','n',':BufferPrevious<Enter>',{noremap=true,silent=false})
-    vim.api.nvim_set_keymap('n','m',':BufferNext<Enter>',{noremap=true,silent=false})
-    vim.api.nvim_set_keymap('n','<Esc>n',':BufferMovePrevious<Enter>',{noremap=true,silent=false})
-    vim.api.nvim_set_keymap('n','<Esc>m',':BufferMoveNext<Enter>',{noremap=true,silent=false})
-    for i = 1, 9 do
-        vim.api.nvim_set_keymap('n',tostring(i),":BufferGoto " .. tostring(i) .. " <Enter>",
-        {noremap=true,silent=false})
-    end
-
-
-
-
-
-    -- Auto-generate comments
-    nnoremap("CC", ":DogeGenerate <Tab> <Enter>")
-
-    -- Telescope commands to make navigation easier
-    nnoremap("rr", ":Telescope find_files <Enter>")
-
-    -- Shows errors
-    nnoremap("er", ":TroubleToggle <Enter>")
-
-    -- Vimtex commands
-    nnoremap("tk", ":VimtexCompile <Enter>")
-    nnoremap("te", ":VimtexErrors <Enter>")
-end)
-
--- PHP Intelephense LSP config
-require('lspconfig').intelephense.setup{
-    "intelephense", "--stdio", "php"
-}
-
--- Underlines the current Cursorline position
-vim.cmd([[hi CursorLine gui=underline cterm=underline]])
+    -- Underlines the current Cursorline position
+    vim.cmd([[hi CursorLine gui=underline cterm=underline]])
 
