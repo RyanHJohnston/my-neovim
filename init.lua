@@ -917,8 +917,8 @@ if has('termguicolors')
 
         -- ToggleTerm and NvimTreeToggle mappings
         --  require'mapx'.setup{ global = true }
-
-        vim.api.nvim_set_keymap('n','f',':NeoTree<Enter>',{noremap=true,silent=true})
+        
+        vim.api.nvim_set_keymap('n','f',':Neotree<Enter>',{noremap=true,silent=true})
         vim.api.nvim_set_keymap('n','ff',':NeoTreeClose<Enter>',{noremap=true,silent=true})
         vim.api.nvim_set_keymap('n','T',':ToggleTerm direction=horizontal size=25<Enter>',{noremap=true,silent=true})
         vim.api.nvim_set_keymap('n','TV',':ToggleTerm direction=vertical size=100<Enter>',{noremap=true,silent=true})
